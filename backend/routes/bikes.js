@@ -71,9 +71,20 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 // Delete a bike
 router.delete('/:id', async (req, res) => {
   try {
-    const bike = await Bike.findByIdAndDelete(req.params.id);
+    const bike = await Bike.findById(req.params.id);
     if (!bike) return res.status(404).json({ message: 'Bike not found' });
-    res.json({ message: 'Bike deleted' });
+
+    // Delete the associated image file from the disk
+    if (bike.image && bike.image.startsWith('/uploads')) {
+      const fs = require('fs');
+      const imagePath = path.join(__dirname, '..', bike.image);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    await Bike.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Bike and image deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

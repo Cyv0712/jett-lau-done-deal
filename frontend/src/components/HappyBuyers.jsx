@@ -9,7 +9,7 @@ const HappyBuyers = () => {
       location: 'Marikina City',
       bike: 'Honda Africa Twin',
       quote: 'Sobrang daling kausap ni sir Jett! The bike was exactly as described, no hidden issues. Ready for our next long ride up North. Salamat sa tiwala!',
-      image: 'https://images.unsplash.com/photo-1558981001-5864b3250a69?q=80&w=500&auto=format&fit=crop'
+      image: '/static_data/testimony_1.jpg'
     },
     {
       id: 2,
@@ -17,7 +17,7 @@ const HappyBuyers = () => {
       location: 'Cebu City (Shipped)',
       bike: 'BMW R 1250 GS',
       quote: 'Kahit nasa Cebu kami, smooth ang transaction at shipping. Very professional and transparent with the papers. Maraming salamat Jett Lau Done Deal!',
-      image: 'https://images.unsplash.com/photo-1558980664-ce6960be307d?q=80&w=500&auto=format&fit=crop'
+      image: '/static_data/testimony_2.jpg'
     },
     {
       id: 3,
@@ -25,7 +25,7 @@ const HappyBuyers = () => {
       location: 'Quezon City',
       bike: 'Ducati Multistrada',
       quote: 'I\'ve bought multiple bikes from them. Laging quality at alagang-alaga ang mga units. The best premium bigbike dealer sa buong Metro Manila!',
-      image: 'https://images.unsplash.com/photo-1623863456382-9cb77da96df6?q=80&w=500&auto=format&fit=crop'
+      image: '/static_data/testimony_3.jpg'
     }
   ];
 

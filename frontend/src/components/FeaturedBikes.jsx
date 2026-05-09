@@ -1,58 +1,90 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { FaTag, FaRoad, FaCalendarAlt } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Container, Row, Col, Badge, Carousel } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { showcaseBikes } from '../data/showcase';
 
 const FeaturedBikes = () => {
-  const [bikesData, setBikesData] = useState([]);
+  const [inventoryModels, setInventoryModels] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch live inventory to check stock status
     fetch('http://localhost:5000/api/bikes')
       .then(res => res.json())
-      .then(data => setBikesData(data))
+      .then(data => {
+        const modelsInStock = data.map(bike => bike.model.toLowerCase());
+        setInventoryModels(modelsInStock);
+      })
       .catch(err => console.error(err));
   }, []);
 
-  const featured = bikesData.slice(0, 3); // Grab the first 3 for the homepage
-  const getImageUrl = (image) => image && image.startsWith('/uploads') ? `http://localhost:5000${image}` : image;
+  const checkStock = (searchModel) => {
+    return inventoryModels.includes(searchModel.toLowerCase());
+  };
+
+  const handleCardClick = (e, slug) => {
+    // If the user clicked on a carousel control or indicator, do NOT navigate
+    if (e.target.closest('.carousel-control-prev') ||
+      e.target.closest('.carousel-control-next') ||
+      e.target.closest('.carousel-indicators')) {
+      return;
+    }
+    navigate(`/showcase/${slug}`);
+  };
 
   return (
     <section id="inventory" className="section-padding">
       <Container>
         <h2 className="section-title">
-          FEATURED <span className="text-accent">ADVENTURE BIKES</span>
+          FEATURED <span className="text-accent">BIKES</span>
         </h2>
         <Row className="g-4">
-          {featured.map((bike) => (
-            <Col lg={4} md={6} key={bike._id}>
-              <Link to={`/bike/${bike._id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}>
-                <div className="bike-card">
-                  <div className="bike-img-wrapper">
-                    <img src={getImageUrl(bike.image)} alt={bike.model} className="bike-img" />
+          {showcaseBikes.map((bike) => {
+            const inStock = checkStock(bike.searchModel);
+
+            return (
+              <Col lg={4} md={6} key={bike.slug}>
+                {/* We use a div instead of a Link wrapper to manually control routing without hijacking carousel clicks */}
+                <div
+                  className="bike-card position-relative"
+                  style={{ cursor: 'pointer', height: '100%' }}
+                  onClick={(e) => handleCardClick(e, bike.slug)}
+                >
+                  <div className="position-absolute top-0 end-0 p-3" style={{ zIndex: 2 }}>
+                    {inStock ? (
+                      <Badge bg="success" className="px-3 py-2 shadow" style={{ fontSize: '0.9rem' }}>In Stock</Badge>
+                    ) : (
+                      <Badge bg="danger" className="px-3 py-2 shadow" style={{ fontSize: '0.9rem' }}>Out of Stock</Badge>
+                    )}
                   </div>
-                  <div className="bike-details">
-                    <span className="text-secondary mb-2 d-block">{bike.brand}</span>
-                    <h3 className="bike-title">{bike.model}</h3>
-                    <div className="bike-specs">
-                      <span><FaCalendarAlt className="text-accent me-2" />{bike.year}</span>
-                      <span><FaRoad className="text-accent me-2" />{bike.mileage}</span>
-                    </div>
-                    <hr style={{ borderColor: 'rgba(255,255,255,0.1)' }} />
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div>
-                        <span className="text-secondary d-block" style={{ fontSize: '0.8rem' }}><FaTag className="me-1"/> Cash Price</span>
-                        <p className="bike-price">{bike.price}</p>
-                      </div>
-                    </div>
+
+                  <div className="bike-img-wrapper" style={{ height: '250px' }}>
+                    <Carousel interval={null} slide={true}>
+                      {bike.images.map((imgSrc, idx) => (
+                        <Carousel.Item key={idx}>
+                          <img
+                            src={imgSrc}
+                            alt={`${bike.model} angle ${idx + 1}`}
+                            className="d-block w-100"
+                            style={{ height: '250px', objectFit: 'cover' }}
+                          />
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+                  </div>
+
+                  <div className="bike-details p-4">
+                    <span className="text-secondary mb-1 d-block text-uppercase fw-bold" style={{ fontSize: '0.8rem', letterSpacing: '1px' }}>{bike.brand}</span>
+                    <h3 className="bike-title mb-3">{bike.model}</h3>
+                    <p className="text-secondary mb-0" style={{ fontSize: '0.95rem', lineHeight: '1.6' }}>
+                      {bike.description}
+                    </p>
                   </div>
                 </div>
-              </Link>
-            </Col>
-          ))}
+              </Col>
+            );
+          })}
         </Row>
-        <div className="text-center mt-5">
-          <Link to="/inventory" className="btn-accent text-decoration-none d-inline-block">View All Inventory</Link>
-        </div>
       </Container>
     </section>
   );
