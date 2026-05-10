@@ -8,6 +8,7 @@ export const apiUrl = (path = '') => {
 
 export const toAbsoluteUploadUrl = (path) => {
   if (!path) return path;
+  if (/^https?:\/\//i.test(path)) return path;
   if (path.startsWith('/uploads')) return apiUrl(path);
   return path;
 };
