@@ -12,7 +12,8 @@ const FeaturedBikes = () => {
     fetch('http://localhost:5000/api/bikes')
       .then(res => res.json())
       .then(data => {
-        const modelsInStock = data.map(bike => bike.model.toLowerCase());
+        const inStockOnly = data.filter(bike => bike.status === 'Available' || !bike.status);
+        const modelsInStock = inStockOnly.map(bike => bike.model.toLowerCase());
         setInventoryModels(modelsInStock);
       })
       .catch(err => console.error(err));
