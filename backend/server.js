@@ -9,8 +9,9 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const CORS_ORIGIN = process.env.CORS_ORIGIN;
 
-app.use(cors());
+app.use(cors(CORS_ORIGIN ? { origin: CORS_ORIGIN } : undefined));
 app.use(express.json());
 
 // Ensure uploads directory exists
@@ -26,16 +27,22 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const bikesRouter = require('./routes/bikes');
 app.use('/api/bikes', bikesRouter);
 
-// Connect to MongoDB
+// Health check — Render needs an open port quickly; don't wait for Mongo.
+app.get('/health', (req, res) => {
+  const dbOk = mongoose.connection.readyState === 1;
+  res.status(200).json({
+    ok: true,
+    db: dbOk ? 'connected' : 'pending_or_disconnected',
+  });
+});
+
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/jettlaudonedeal';
 
-mongoose.connect(MONGO_URI)
-  .then(() => {
-    console.log('Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('Failed to connect to MongoDB', err);
-  });
+const host = process.env.HOST || '0.0.0.0';
+app.listen(PORT, host, () => {
+  console.log(`Server listening on http://${host}:${PORT}`);
+  mongoose
+    .connect(MONGO_URI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((err) => console.error('Failed to connect to MongoDB', err));
+});

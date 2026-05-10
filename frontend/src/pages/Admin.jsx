@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Container, Table, Button, Form, Modal, Row, Col } from 'react-bootstrap';
 import { FaTrash, FaPlus, FaMotorcycle, FaMoneyBillWave, FaChartLine, FaSignOutAlt, FaCheck } from 'react-icons/fa';
+import { apiUrl } from '../config/api';
 
 // Parse price strings like "₱450,000" → 450000
 const parsePrice = (priceStr) => {
@@ -29,7 +30,7 @@ const Admin = () => {
 
   const fetchBikes = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/bikes');
+      const res = await fetch(apiUrl('/api/bikes'));
       const data = await res.json();
       setBikes(data);
     } catch (err) {
@@ -69,7 +70,7 @@ const Admin = () => {
     Object.keys(formData).forEach((key) => data.append(key, formData[key]));
     imageFiles.forEach((file) => data.append('images', file));
     try {
-      const res = await fetch('http://localhost:5000/api/bikes', { method: 'POST', body: data });
+      const res = await fetch(apiUrl('/api/bikes'), { method: 'POST', body: data });
       if (!res.ok) throw new Error(await res.text());
       setShowModal(false);
       setFormData(EMPTY_FORM);
@@ -86,7 +87,7 @@ const Admin = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this bike?')) {
       try {
-        await fetch(`http://localhost:5000/api/bikes/${id}`, { method: 'DELETE' });
+        await fetch(apiUrl(`/api/bikes/${id}`), { method: 'DELETE' });
         fetchBikes();
       } catch (err) {
         console.error(err);
@@ -97,7 +98,7 @@ const Admin = () => {
   const handleMarkAsSold = async (id) => {
     if (window.confirm('Mark this bike as sold?')) {
       try {
-        await fetch(`http://localhost:5000/api/bikes/${id}/sold`, { method: 'PATCH' });
+        await fetch(apiUrl(`/api/bikes/${id}/sold`), { method: 'PATCH' });
         fetchBikes();
       } catch (err) {
         console.error(err);

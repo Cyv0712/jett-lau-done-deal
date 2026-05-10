@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Badge, Carousel } from 'react-bootstrap';
 import { FaArrowLeft, FaCalendarAlt, FaRoad, FaExclamationTriangle, FaCheckCircle, FaCogs, FaCircle } from 'react-icons/fa';
+import { apiUrl, toAbsoluteUploadUrl } from '../config/api';
 
 const BikeDetails = () => {
   const { id } = useParams();
@@ -9,7 +10,7 @@ const BikeDetails = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/bikes/${id}`)
+    fetch(apiUrl(`/api/bikes/${id}`))
       .then((res) => {
         if (!res.ok) throw new Error('Not found');
         return res.json();
@@ -18,8 +19,22 @@ const BikeDetails = () => {
       .catch((err) => { console.error(err); setLoading(false); });
   }, [id]);
 
-  const getImageUrl = (path) =>
-    path && path.startsWith('/uploads') ? `http://localhost:5000${path}` : path;
+  const getImageUrl = (path) => toAbsoluteUploadUrl(path);
+
+  // Append a unit suffix only if the value doesn't already contain it
+  const withUnit = (value, suffix) => {
+    if (!value) return '—';
+    const str = String(value).trim();
+    if (str.toLowerCase().endsWith(suffix.toLowerCase())) return str;
+    return `${str} ${suffix}`;
+  };
+
+  // Prefix ₱ only if the value doesn't already start with it
+  const withPeso = (value) => {
+    if (!value) return '—';
+    const str = String(value).trim();
+    return str.startsWith('₱') ? str : `₱${str}`;
+  };
 
   // Normalise to an array — supports both old (string) and new (array) schema
   const getImages = (bike) => {
@@ -127,12 +142,12 @@ const BikeDetails = () => {
                   <FaRoad className="text-accent fs-4" />
                   <div>
                     <small className="text-secondary d-block">Mileage</small>
-                    <span className="fw-bold">{bike.mileage}</span>
+                    <span className="fw-bold">{withUnit(bike.mileage, 'km')}</span>
                   </div>
                 </div>
               </div>
 
-              <h2 className="text-accent fw-bold mb-4" style={{ fontSize: '2.5rem' }}>{bike.price}</h2>
+              <h2 className="text-accent fw-bold mb-4" style={{ fontSize: '2.5rem' }}>{withPeso(bike.price)}</h2>
 
               <button className="btn-accent w-100 mb-4" style={{ fontSize: '1.2rem', padding: '15px' }}>
                 Contact Seller
@@ -151,10 +166,11 @@ const BikeDetails = () => {
                 <h5 className="text-white mb-3"><FaCogs className="text-accent me-2" /> Technical Specs</h5>
                 <Row className="g-3">
                   {[
-                    { label: 'Engine Size', value: bike.engineSize },
-                    { label: 'Engine Config', value: bike.engineConfig },
-                    { label: 'Max Power', value: bike.power },
-                    { label: 'Transmission', value: bike.transmission },
+                    { label: 'Engine Size',   value: bike.engineSize },
+                    { label: 'Engine Config',  value: bike.engineConfig },
+                    { label: 'Max Power',      value: withUnit(bike.power, 'HP') },
+                    { label: 'Transmission',   value: bike.transmission },
+                    { label: 'Fuel Capacity',  value: withUnit(bike.fuelCapacity, 'L') },
                   ].map(({ label, value }) => (
                     <Col md={6} key={label}>
                       <div className="p-3 rounded" style={{ backgroundColor: '#121212', border: '1px solid rgba(255,255,255,0.02)' }}>

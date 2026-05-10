@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Badge, Carousel } from 'react-bootstrap';
 import { FaArrowLeft, FaCheck } from 'react-icons/fa';
 import { showcaseBikes } from '../data/showcase';
+import { apiUrl } from '../config/api';
 
 const ShowcaseDetails = () => {
   const { slug } = useParams();
@@ -12,7 +13,7 @@ const ShowcaseDetails = () => {
 
   useEffect(() => {
     if (bike) {
-      fetch('http://localhost:5000/api/bikes')
+      fetch(apiUrl('/api/bikes'))
         .then(res => res.json())
         .then(data => {
           const matchedBike = data.find(b => b.model.toLowerCase() === bike.searchModel.toLowerCase());

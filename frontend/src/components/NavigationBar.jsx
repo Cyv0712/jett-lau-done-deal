@@ -1,23 +1,32 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { FaMotorcycle } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 const NavigationBar = () => {
+  const { pathname, hash } = useLocation();
+  const getSectionLinkClass = (sectionHash) =>
+    `nav-link nav-link-item ${pathname === '/' && hash === sectionHash ? 'nav-link-active' : ''}`;
+
   return (
     <Navbar expand="lg" fixed="top" className="glass-nav" variant="dark">
       <Container>
         <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
           <FaMotorcycle className="text-accent" />
           <span>JETT LAU <span className="text-accent">DONE DEAL</span></span>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg"
+            alt="Philippines"
+            style={{ height: '14px', width: 'auto', borderRadius: '2px', opacity: 0.85, marginLeft: '4px' }}
+          />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/">HOME</Nav.Link>
-            <Nav.Link as={Link} to="/inventory">INVENTORY</Nav.Link>
-            <Nav.Link href="/#buyers">BUYERS</Nav.Link>
-            <Nav.Link href="/#about">ABOUT</Nav.Link>
-            <Nav.Link href="/#contact">CONTACT</Nav.Link>
+            <NavLink to="/" end className={({ isActive }) => `nav-link nav-link-item ${isActive ? 'nav-link-active' : ''}`}>HOME</NavLink>
+            <NavLink to="/inventory" className={({ isActive }) => `nav-link nav-link-item ${isActive ? 'nav-link-active' : ''}`}>INVENTORY</NavLink>
+            <NavLink to="/#buyers" className={getSectionLinkClass('#buyers')}>BUYERS</NavLink>
+            <NavLink to="/#about" className={getSectionLinkClass('#about')}>ABOUT</NavLink>
+            <NavLink to="/#contact" className={getSectionLinkClass('#contact')}>CONTACT</NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>

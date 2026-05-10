@@ -3,11 +3,27 @@ import { Container, Row, Col, Alert } from 'react-bootstrap';
 import { FaTag, FaRoad, FaCalendarAlt, FaFilter, FaInfoCircle, FaSearch, FaTimes } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import SkeletonCard from '../components/SkeletonCard';
+import { apiUrl, toAbsoluteUploadUrl } from '../config/api';
 
 // --- Helper ---
 const parsePrice = (priceStr) => {
   if (!priceStr) return 0;
   return parseFloat(String(priceStr).replace(/[^0-9.]/g, '')) || 0;
+};
+
+// Append unit suffix only if not already present
+const withUnit = (value, suffix) => {
+  if (!value) return '—';
+  const str = String(value).trim();
+  if (str.toLowerCase().endsWith(suffix.toLowerCase())) return str;
+  return `${str} ${suffix}`;
+};
+
+// Prefix ₱ only if not already present
+const withPeso = (value) => {
+  if (!value) return '—';
+  const str = String(value).trim();
+  return str.startsWith('₱') ? str : `₱${str}`;
 };
 
 const INITIAL_FILTERS = { search: '', brand: 'All', type: 'All', priceMin: '', priceMax: '' };
@@ -18,14 +34,26 @@ const Inventory = () => {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/bikes')
+    const MIN_SKELETON_MS = 900;
+    const startedAt = Date.now();
+
+    const finishLoading = () => {
+      const elapsed = Date.now() - startedAt;
+      const remaining = Math.max(0, MIN_SKELETON_MS - elapsed);
+      setTimeout(() => setLoading(false), remaining);
+    };
+
+    fetch(apiUrl('/api/bikes'))
       .then((res) => res.json())
-      .then((data) => { 
+      .then((data) => {
         const availableOnly = data.filter(b => b.status === 'Available' || !b.status);
-        setBikesData(availableOnly); 
-        setLoading(false); 
+        setBikesData(availableOnly);
+        finishLoading();
       })
-      .catch((err) => { console.error(err); setLoading(false); });
+      .catch((err) => {
+        console.error(err);
+        finishLoading();
+      });
   }, []);
 
   // Derive unique brand/type options dynamically from actual DB data
@@ -81,7 +109,7 @@ const Inventory = () => {
     const src = Array.isArray(bike.images) && bike.images.length > 0
       ? bike.images[0]
       : bike.image; // backwards compat
-    return src && src.startsWith('/uploads') ? `http://localhost:5000${src}` : src;
+    return toAbsoluteUploadUrl(src);
   };
 
   const sidebarStyle = {
@@ -246,11 +274,11 @@ const Inventory = () => {
                           <h4 className="bike-title" style={{ fontSize: '1.2rem' }}>{bike.model}</h4>
                           <div className="bike-specs mb-3">
                             <span><FaCalendarAlt className="text-accent me-1" />{bike.year}</span>
-                            <span><FaRoad className="text-accent me-1" />{bike.mileage}</span>
+                            <span><FaRoad className="text-accent me-1" />{withUnit(bike.mileage, 'km')}</span>
                           </div>
                           <hr style={{ borderColor: 'rgba(255,255,255,0.1)', margin: '10px 0' }} />
                           <div className="d-flex justify-content-between align-items-center">
-                            <span className="bike-price" style={{ fontSize: '1.4rem' }}>{bike.price}</span>
+                            <span className="bike-price" style={{ fontSize: '1.4rem' }}>{withPeso(bike.price)}</span>
                           </div>
                         </div>
                       </div>

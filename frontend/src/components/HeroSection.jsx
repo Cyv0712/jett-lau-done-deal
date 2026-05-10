@@ -19,7 +19,7 @@ const HeroSection = () => {
               <button className="btn-accent d-flex align-items-center gap-2">
                 View Inventory <FaArrowRight />
               </button>
-              <button className="btn-accent" style={{ background: 'transparent', border: '1px solid white' }}>
+              <button className="btn-accent" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.4)' }}>
                 Contact Us
               </button>
             </div>

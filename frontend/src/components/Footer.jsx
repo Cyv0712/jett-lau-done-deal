@@ -46,7 +46,15 @@ const Footer = () => {
           </Col>
         </Row>
         <div className="text-center text-secondary pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <p className="mb-0">&copy; {new Date().getFullYear()} Jett Lau Done Deal. All Rights Reserved.</p>
+          <p className="mb-0 d-flex align-items-center justify-content-center gap-2">
+            &copy; {new Date().getFullYear()} Jett Lau Done Deal. All Rights Reserved.
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg"
+              alt="Made in the Philippines"
+              title="Proudly Philippine"
+              style={{ height: '13px', width: 'auto', borderRadius: '2px', opacity: 0.7 }}
+            />
+          </p>
         </div>
       </Container>
     </footer>
