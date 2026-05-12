@@ -2,6 +2,8 @@ import { Navbar, Nav, Container } from 'react-bootstrap';
 import { FaMotorcycle } from 'react-icons/fa';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 
+import { brandConfig } from '../data/brandConfig';
+
 const NavigationBar = () => {
   const { pathname, hash } = useLocation();
   const getSectionLinkClass = (sectionHash) =>
@@ -12,7 +14,7 @@ const NavigationBar = () => {
       <Container>
         <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
           <FaMotorcycle className="text-accent" />
-          <span>JETT LAU <span className="text-accent">DONE DEAL</span></span>
+          <span>{brandConfig.name} <span className="text-accent">{brandConfig.brandSuffix}</span></span>
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg"
             alt="Philippines"
@@ -24,9 +26,9 @@ const NavigationBar = () => {
           <Nav className="ms-auto">
             <NavLink to="/" end className={({ isActive }) => `nav-link nav-link-item ${isActive ? 'nav-link-active' : ''}`}>HOME</NavLink>
             <NavLink to="/inventory" className={({ isActive }) => `nav-link nav-link-item ${isActive ? 'nav-link-active' : ''}`}>INVENTORY</NavLink>
-            <NavLink to="/#buyers" className={getSectionLinkClass('#buyers')}>BUYERS</NavLink>
-            <NavLink to="/#about" className={getSectionLinkClass('#about')}>ABOUT</NavLink>
-            <NavLink to="/#contact" className={getSectionLinkClass('#contact')}>CONTACT</NavLink>
+            <NavLink to="/buyers" className={({ isActive }) => `nav-link nav-link-item ${isActive ? 'nav-link-active' : ''}`}>BUYERS</NavLink>
+            <NavLink to="/about" className={({ isActive }) => `nav-link nav-link-item ${isActive ? 'nav-link-active' : ''}`}>ABOUT</NavLink>
+            <NavLink to="/contact" className={({ isActive }) => `nav-link nav-link-item ${isActive ? 'nav-link-active' : ''}`}>CONTACT</NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>
