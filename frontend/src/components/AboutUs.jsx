@@ -1,3 +1,5 @@
+import { Container, Row, Col } from 'react-bootstrap';
+import { FaShieldAlt, FaCheckDouble, FaFileContract } from 'react-icons/fa';
 import { brandConfig } from '../data/brandConfig';
 
 const AboutUs = () => {
