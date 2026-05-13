@@ -95,7 +95,6 @@ const Admin = () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    // ── Automatic Mapping Logic ──
     const parts = formData.combinedIdentity.trim().split(/\s+/);
     let brand = '';
     let model = '';
@@ -113,17 +112,14 @@ const Admin = () => {
     }
 
     const data = new FormData();
-    // Append auto-mapped fields
     data.append('brand', brand);
     data.append('model', model);
     const cleanEngineSize = engineSize.toUpperCase().replace('CC', '').trim();
     data.append('engineSize', `${formatWithCommas(cleanEngineSize)} CC`);
     
-    // Append rest of the form
     Object.keys(formData).forEach((key) => {
       if (!['brand', 'model', 'engineSize', 'combinedIdentity'].includes(key)) {
         let value = formData[key];
-        // Auto-format numeric strings with commas
         if (['price', 'mileage'].includes(key)) {
           value = formatWithCommas(value);
         }
@@ -135,14 +131,25 @@ const Admin = () => {
 
     try {
       const res = await fetch(apiUrl('/api/bikes'), { method: 'POST', body: data });
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText);
+      }
+      
+      // Success! Reset everything
       setShowModal(false);
       setFormData(EMPTY_FORM);
       setImageFiles([]);
       fetchBikes();
     } catch (err) {
       console.error('Failed to add bike:', err);
-      alert('Failed to save bike. Check the console for details.');
+      // Only alert if it's not a timeout error (the backend might still succeed)
+      if (err.name !== 'TypeError') {
+        alert(`Failed to save: ${err.message}`);
+      } else {
+        // This is usually a timeout on Render's free tier
+        alert('Upload is taking a while. Please refresh the inventory in 1 minute to see if it saved!');
+      }
     } finally {
       setIsSubmitting(false);
     }

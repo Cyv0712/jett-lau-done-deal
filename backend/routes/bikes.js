@@ -30,10 +30,27 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Simple in-memory cache to prevent duplicate submissions from retries
+const recentSubmissions = new Map();
+
 // Create a bike — accepts multiple images
 router.post('/', upload.array('images', 10), async (req, res) => {
   try {
     const bikeData = { ...req.body };
+    
+    // Create a unique fingerprint for this submission
+    const fingerprint = `${bikeData.brand}-${bikeData.model}-${bikeData.price}-${bikeData.mileage}`;
+    const now = Date.now();
+    
+    if (recentSubmissions.has(fingerprint)) {
+      const lastTime = recentSubmissions.get(fingerprint);
+      if (now - lastTime < 30000) { // 30 second window
+        console.log('Duplicate submission detected, ignoring retry:', fingerprint);
+        return res.status(200).json({ message: 'Duplicate submission ignored' });
+      }
+    }
+    
+    recentSubmissions.set(fingerprint, now);
 
     if (req.files?.length) {
       bikeData.images = await persistUploadedImages(req.files);

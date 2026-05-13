@@ -46,10 +46,18 @@ const Inventory = () => {
       try {
         const res = await fetch(apiUrl('/api/bikes'));
         const data = await res.json();
-        const availableOnly = data.filter(b => b.status === 'Available' || !b.status);
-        setBikesData(availableOnly);
+        
+        // Handle cases where the backend returns an error object instead of an array
+        if (Array.isArray(data)) {
+          const availableOnly = data.filter(b => b.status === 'Available' || !b.status);
+          setBikesData(availableOnly);
+        } else {
+          console.error('API Error: Expected array but received:', data);
+          setBikesData([]);
+        }
       } catch (err) {
-        console.error(err);
+        console.error('Fetch Error:', err);
+        setBikesData([]);
       } finally {
         const elapsed = Date.now() - startedAt;
         const remaining = Math.max(0, MIN_SKELETON_MS - elapsed);

@@ -10,8 +10,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const CORS_ORIGIN = process.env.CORS_ORIGIN;
+const allowedOrigins = CORS_ORIGIN ? CORS_ORIGIN.split(',').map(o => o.trim()) : '*';
 
-app.use(cors(CORS_ORIGIN ? { origin: CORS_ORIGIN } : undefined));
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(express.json());
 
 // Ensure uploads directory exists
