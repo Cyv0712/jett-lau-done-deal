@@ -4,7 +4,13 @@ import { brandConfig } from '../data/brandConfig';
 
 const HeroSection = () => {
   return (
-    <section id="home" className="hero-section">
+    <section 
+      id="home" 
+      className="hero-section"
+      style={{
+        backgroundImage: `linear-gradient(to right, rgba(11,11,15,0.92) 0%, rgba(11,11,15,0.55) 100%), url('${brandConfig.images.heroBackground}')`
+      }}
+    >
       <Container>
         <Row>
           <Col lg={8}>

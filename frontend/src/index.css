@@ -109,9 +109,6 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background-image:
-    linear-gradient(to right, rgba(11,11,15,0.92) 0%, rgba(11,11,15,0.55) 100%),
-    url('https://images.unsplash.com/photo-1558980664-769d59546b3d?q=80&w=1470&auto=format&fit=crop');
   background-size: cover;
   background-position: center;
   padding-top: 76px;
