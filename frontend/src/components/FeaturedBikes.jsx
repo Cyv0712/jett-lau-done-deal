@@ -49,8 +49,7 @@ const FeaturedBikes = () => {
                 {/* We use a div instead of a Link wrapper to manually control routing without hijacking carousel clicks */}
                 <div
                   className="bike-card position-relative"
-                  style={{ cursor: 'pointer', height: '100%' }}
-                  onClick={(e) => handleCardClick(e, bike.slug)}
+                  style={{ height: '100%' }}
                 >
                   <div className="position-absolute top-0 end-0 p-3" style={{ zIndex: 2 }}>
                     {inStock ? (
@@ -78,9 +77,22 @@ const FeaturedBikes = () => {
                   <div className="bike-details p-4">
                     <span className="text-secondary mb-1 d-block text-uppercase fw-bold" style={{ fontSize: '0.8rem', letterSpacing: '1px' }}>{bike.brand}</span>
                     <h3 className="bike-title mb-3">{bike.model}</h3>
-                    <p className="text-secondary mb-0" style={{ fontSize: '0.95rem', lineHeight: '1.6' }}>
+                    <p className="text-secondary mb-4" style={{ fontSize: '0.95rem', lineHeight: '1.6' }}>
                       {bike.description}
                     </p>
+                    <Link 
+                      to={`/showcase/${bike.slug}`} 
+                      className="text-accent cta-link-hover" 
+                      style={{ 
+                        fontSize: '0.85rem', 
+                        textDecoration: 'underline',
+                        textUnderlineOffset: '3px',
+                        fontWeight: '600',
+                        display: 'inline-block'
+                      }}
+                    >
+                      View Full Details
+                    </Link>
                   </div>
                 </div>
               </Col>
