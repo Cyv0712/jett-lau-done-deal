@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const cloudinary = require('cloudinary');
+const cloudinary = require('cloudinary').v2;
 
 function isCloudinaryConfigured() {
   return !!(
@@ -52,16 +52,29 @@ function publicIdFromCloudinaryUrl(url) {
 }
 
 async function uploadBufferToCloudinary(file) {
-  const folder = process.env.CLOUDINARY_FOLDER || 'jett-lau-done-deal/bikes';
+  const folder = process.env.CLOUDINARY_FOLDER || 'katingin-bikes/bikes';
   const mime = file.mimetype || 'image/jpeg';
   const dataUri = `data:${mime};base64,${file.buffer.toString('base64')}`;
-  const result = await cloudinary.uploader.upload(dataUri, {
-    folder,
-    resource_type: 'image',
-    use_filename: false,
-    unique_filename: true,
-  });
-  return result.secure_url;
+  
+  // Create a unique filename
+  const fileName = `${Date.now()}-${Math.round(Math.random() * 1e6)}`;
+  
+  console.log('--- Cloudinary Upload Start ---');
+  console.log('Target Path:', `${folder}/${fileName}`);
+  
+  try {
+    const result = await cloudinary.uploader.upload(dataUri, {
+      public_id: fileName,
+      folder: folder,
+      resource_type: 'image',
+      overwrite: true
+    });
+    console.log('Upload Success! URL:', result.secure_url);
+    return result.secure_url;
+  } catch (err) {
+    console.error('Cloudinary Upload FAILED:', err.message);
+    throw err;
+  }
 }
 
 async function writeBufferToDisk(file) {
