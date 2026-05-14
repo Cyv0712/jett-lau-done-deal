@@ -33,7 +33,7 @@ export const brandConfig = {
     
     // Used on the About page
     aboutHeroBackground: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1470&auto=format&fit=crop",
-    storyImage: "https://images.unsplash.com/photo-1570183180905-24e548dbbb32?q=80&w=1470&auto=format&fit=crop",
+    storyImage: "/static_data/aboutus_1.jpg",
     
     // The 3 cards in the 'Done Deal Experience' section
     experienceCard1: "https://images.unsplash.com/photo-1558981285-6f0c94958bb6?q=80&w=1470&auto=format&fit=crop",

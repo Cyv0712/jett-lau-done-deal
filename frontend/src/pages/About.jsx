@@ -52,16 +52,12 @@ const About = () => {
               </div>
             </Col>
             <Col lg={6}>
-              <div className="position-relative">
-                {/* Decorative border */}
-                <div className="position-absolute w-100 h-100 rounded" style={{ border: '2px solid var(--accent-color)', top: '20px', left: '20px', zIndex: 0 }}></div>
-                <img
-                  src={brandConfig.images.storyImage}
-                  alt={brandConfig.name}
-                  className="img-fluid rounded shadow-lg position-relative"
-                  style={{ zIndex: 1, objectFit: 'cover', height: '450px', width: '100%' }}
-                />
-              </div>
+              <img
+                src={brandConfig.images.storyImage}
+                alt={brandConfig.name}
+                className="img-fluid rounded shadow-lg w-100"
+                style={{ objectFit: 'cover', objectPosition: 'top', height: '550px' }}
+              />
             </Col>
           </Row>
         </Container>

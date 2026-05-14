@@ -46,8 +46,13 @@ const Inventory = () => {
     fetch(apiUrl('/api/bikes'))
       .then((res) => res.json())
       .then((data) => {
-        const availableOnly = data.filter(b => b.status === 'Available' || !b.status);
-        setBikesData(availableOnly);
+        if (Array.isArray(data)) {
+          const availableOnly = data.filter(b => b.status === 'Available' || !b.status);
+          setBikesData(availableOnly);
+        } else {
+          console.error('API Error: Expected array but received:', data);
+          setBikesData([]);
+        }
         finishLoading();
       })
       .catch((err) => {
