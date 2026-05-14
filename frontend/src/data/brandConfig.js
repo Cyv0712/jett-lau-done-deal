@@ -20,9 +20,24 @@ export const brandConfig = {
   philosophyTitle: 'THE HONEST NOTE PHILOSOPHY',
   philosophyDescription: "We believe peace of mind is the ultimate luxury. Our transparent approach means every scratch, every spec, and every service need is fully disclosed before you even see the bike in person.",
   
-  // Theme Overrides (Optional - can be used in JS if needed)
+  // Theme Overrides
   theme: {
     accent: '#f97316', // Orange
     bgDark: '#0b0b0f',
+  },
+  
+  // Brand Assets & Images
+  images: {
+    // Used on the homepage
+    heroBackground: "https://images.unsplash.com/photo-1558980664-769d59546b3d?q=80&w=1470&auto=format&fit=crop",
+    
+    // Used on the About page
+    aboutHeroBackground: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1470&auto=format&fit=crop",
+    storyImage: "/static_data/aboutus_1.jpg",
+    
+    // The 3 cards in the 'Done Deal Experience' section
+    experienceCard1: "https://images.unsplash.com/photo-1558981285-6f0c94958bb6?q=80&w=1470&auto=format&fit=crop",
+    experienceCard2: "https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?q=80&w=1470&auto=format&fit=crop",
+    experienceCard3: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1470&auto=format&fit=crop",
   }
 };

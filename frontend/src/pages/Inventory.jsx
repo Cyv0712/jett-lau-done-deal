@@ -46,8 +46,13 @@ const Inventory = () => {
     fetch(apiUrl('/api/bikes'))
       .then((res) => res.json())
       .then((data) => {
-        const availableOnly = data.filter(b => b.status === 'Available' || !b.status);
-        setBikesData(availableOnly);
+        if (Array.isArray(data)) {
+          const availableOnly = data.filter(b => b.status === 'Available' || !b.status);
+          setBikesData(availableOnly);
+        } else {
+          console.error('API Error: Expected array but received:', data);
+          setBikesData([]);
+        }
         finishLoading();
       })
       .catch((err) => {
@@ -264,25 +269,35 @@ const Inventory = () => {
               ) : filteredBikes.length > 0 ? (
                 filteredBikes.map((bike) => (
                   <Col xl={4} md={6} key={bike._id}>
-                    <Link to={`/bike/${bike._id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}>
-                      <div className="bike-card h-100">
-                        <div className="bike-img-wrapper" style={{ height: '200px' }}>
-                          <img src={getImageUrl(bike)} alt={bike.model} className="bike-img" />
+                    <div className="bike-card h-100">
+                      <div className="bike-img-wrapper" style={{ height: '200px' }}>
+                        <img src={getImageUrl(bike)} alt={bike.model} className="bike-img" />
+                      </div>
+                      <div className="bike-details p-3">
+                        <span className="text-secondary mb-1 d-block" style={{ fontSize: '0.85rem' }}>{bike.brand} • {bike.type}</span>
+                        <h4 className="bike-title" style={{ fontSize: '1.2rem' }}>{bike.model} {bike.edition}</h4>
+                        <div className="bike-specs mb-3">
+                          <span><FaCalendarAlt className="text-accent me-1" />{bike.year}</span>
+                          <span><FaRoad className="text-accent me-1" />{withUnit(bike.mileage, 'km')}</span>
                         </div>
-                        <div className="bike-details p-3">
-                          <span className="text-secondary mb-1 d-block" style={{ fontSize: '0.85rem' }}>{bike.brand} • {bike.type}</span>
-                          <h4 className="bike-title" style={{ fontSize: '1.2rem' }}>{bike.model}</h4>
-                          <div className="bike-specs mb-3">
-                            <span><FaCalendarAlt className="text-accent me-1" />{bike.year}</span>
-                            <span><FaRoad className="text-accent me-1" />{withUnit(bike.mileage, 'km')}</span>
-                          </div>
-                          <hr style={{ borderColor: 'rgba(255,255,255,0.1)', margin: '10px 0' }} />
-                          <div className="d-flex justify-content-between align-items-center">
-                            <span className="bike-price" style={{ fontSize: '1.4rem' }}>{withPeso(bike.price)}</span>
-                          </div>
+                        <hr style={{ borderColor: 'rgba(255,255,255,0.1)', margin: '10px 0' }} />
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span className="bike-price" style={{ fontSize: '1.3rem' }}>{withPeso(bike.price)}</span>
+                          <Link 
+                            to={`/bike/${bike._id}`} 
+                            className="text-accent cta-link-hover" 
+                            style={{ 
+                              fontSize: '0.8rem', 
+                              textDecoration: 'underline',
+                              textUnderlineOffset: '3px',
+                              fontWeight: '600'
+                            }}
+                          >
+                            View Full Details
+                          </Link>
                         </div>
                       </div>
-                    </Link>
+                    </div>
                   </Col>
                 ))
               ) : (

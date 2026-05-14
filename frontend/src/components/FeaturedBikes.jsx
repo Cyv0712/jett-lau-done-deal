@@ -3,6 +3,7 @@ import { Container, Row, Col, Badge, Carousel } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { showcaseBikes } from '../data/showcase';
 import { apiUrl } from '../config/api';
+import Reveal from './Reveal';
 
 const FeaturedBikes = () => {
   const [inventoryModels, setInventoryModels] = useState([]);
@@ -37,52 +38,68 @@ const FeaturedBikes = () => {
   return (
     <section id="inventory" className="section-padding">
       <Container>
-        <h2 className="section-title">
-          FEATURED <span className="text-accent">BIKES</span>
-        </h2>
+        <Reveal>
+          <h2 className="section-title">
+            FEATURED <span className="text-accent">BIKES</span>
+          </h2>
+        </Reveal>
         <Row className="g-4">
-          {showcaseBikes.map((bike) => {
+          {showcaseBikes.map((bike, index) => {
             const inStock = checkStock(bike.searchModel);
 
             return (
               <Col lg={4} md={6} key={bike.slug}>
-                {/* We use a div instead of a Link wrapper to manually control routing without hijacking carousel clicks */}
-                <div
-                  className="bike-card position-relative"
-                  style={{ cursor: 'pointer', height: '100%' }}
-                  onClick={(e) => handleCardClick(e, bike.slug)}
-                >
-                  <div className="position-absolute top-0 end-0 p-3" style={{ zIndex: 2 }}>
-                    {inStock ? (
-                      <Badge bg="success" className="px-3 py-2 shadow" style={{ fontSize: '0.9rem' }}>In Stock</Badge>
-                    ) : (
-                      <Badge bg="danger" className="px-3 py-2 shadow" style={{ fontSize: '0.9rem' }}>Out of Stock</Badge>
-                    )}
-                  </div>
+                <Reveal delay={(index % 3) + 1} className="h-100">
+                  {/* We use a div instead of a Link wrapper to manually control routing without hijacking carousel clicks */}
+                  <div
+                    className="bike-card position-relative"
+                    style={{ height: '100%' }}
+                  >
+                    <div className="position-absolute top-0 end-0 p-3" style={{ zIndex: 2 }}>
+                      {inStock ? (
+                        <Badge bg="success" className="px-3 py-2 shadow" style={{ fontSize: '0.9rem' }}>In Stock</Badge>
+                      ) : (
+                        <Badge bg="danger" className="px-3 py-2 shadow" style={{ fontSize: '0.9rem' }}>Out of Stock</Badge>
+                      )}
+                    </div>
 
-                  <div className="bike-img-wrapper" style={{ height: '250px' }}>
-                    <Carousel interval={null} slide={true}>
-                      {bike.images.map((imgSrc, idx) => (
-                        <Carousel.Item key={idx}>
-                          <img
-                            src={imgSrc}
-                            alt={`${bike.model} angle ${idx + 1}`}
-                            className="d-block w-100"
-                            style={{ height: '250px', objectFit: 'cover' }}
-                          />
-                        </Carousel.Item>
-                      ))}
-                    </Carousel>
-                  </div>
+                    <div className="bike-img-wrapper" style={{ height: '250px' }}>
+                      <Carousel interval={null} slide={true}>
+                        {bike.images.map((imgSrc, idx) => (
+                          <Carousel.Item key={idx}>
+                            <img
+                              src={imgSrc}
+                              alt={`${bike.model} angle ${idx + 1}`}
+                              className="d-block w-100"
+                              style={{ height: '250px', objectFit: 'cover' }}
+                            />
+                          </Carousel.Item>
+                        ))}
+                      </Carousel>
+                    </div>
 
-                  <div className="bike-details p-4">
-                    <span className="text-secondary mb-1 d-block text-uppercase fw-bold" style={{ fontSize: '0.8rem', letterSpacing: '1px' }}>{bike.brand}</span>
-                    <h3 className="bike-title mb-3">{bike.model}</h3>
-                    <p className="text-secondary mb-0" style={{ fontSize: '0.95rem', lineHeight: '1.6' }}>
-                      {bike.description}
-                    </p>
+                    <div className="bike-details p-4">
+                      <span className="text-secondary mb-1 d-block text-uppercase fw-bold" style={{ fontSize: '0.8rem', letterSpacing: '1px' }}>{bike.brand}</span>
+                      <h3 className="bike-title mb-3">{bike.model}</h3>
+                      <p className="text-secondary mb-4" style={{ fontSize: '0.95rem', lineHeight: '1.6' }}>
+                        {bike.description}
+                      </p>
+                      <Link 
+                        to={`/showcase/${bike.slug}`} 
+                        className="text-accent cta-link-hover" 
+                        style={{ 
+                          fontSize: '0.85rem', 
+                          textDecoration: 'underline',
+                          textUnderlineOffset: '3px',
+                          fontWeight: '600',
+                          display: 'inline-block'
+                        }}
+                      >
+                        View Full Details
+                      </Link>
+                    </div>
                   </div>
-                </div>
+                </Reveal>
               </Col>
             );
           })}

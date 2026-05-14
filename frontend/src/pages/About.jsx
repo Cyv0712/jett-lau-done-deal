@@ -12,7 +12,7 @@ const About = () => {
         style={{
           minHeight: '90vh',
           marginTop: '76px', // Offset for navbar
-          backgroundImage: `linear-gradient(to bottom, rgba(11,11,15,0.7), rgba(11,11,15,1)), url('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1470&auto=format&fit=crop')`,
+          backgroundImage: `linear-gradient(to bottom, rgba(11,11,15,0.7), rgba(11,11,15,1)), url('${brandConfig.images.aboutHeroBackground}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed'
@@ -52,16 +52,12 @@ const About = () => {
               </div>
             </Col>
             <Col lg={6}>
-              <div className="position-relative">
-                {/* Decorative border */}
-                <div className="position-absolute w-100 h-100 rounded" style={{ border: '2px solid var(--accent-color)', top: '20px', left: '20px', zIndex: 0 }}></div>
-                <img
-                  src="https://images.unsplash.com/photo-1570183180905-24e548dbbb32?q=80&w=1470&auto=format&fit=crop"
-                  alt={brandConfig.name}
-                  className="img-fluid rounded shadow-lg position-relative"
-                  style={{ zIndex: 1, objectFit: 'cover', height: '450px', width: '100%' }}
-                />
-              </div>
+              <img
+                src={brandConfig.images.storyImage}
+                alt={brandConfig.name}
+                className="img-fluid rounded shadow-lg w-100"
+                style={{ objectFit: 'cover', objectPosition: 'top', height: '550px' }}
+              />
             </Col>
           </Row>
         </Container>
@@ -126,7 +122,7 @@ const About = () => {
           <Row className="g-4">
             <Col md={6} lg={4}>
               <Card className="bg-transparent border-0 overflow-hidden h-100" style={{ borderRadius: '12px' }}>
-                <Card.Img variant="top" src="https://images.unsplash.com/photo-1558981285-6f0c94958bb6?q=80&w=1470&auto=format&fit=crop" style={{ height: '250px', objectFit: 'cover' }} />
+                <Card.Img variant="top" src={brandConfig.images.experienceCard1} style={{ height: '250px', objectFit: 'cover' }} />
                 <Card.Body className="p-4" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderTop: 'none', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px' }}>
                   <Card.Title className="text-white fw-bold mb-2">Premium Units</Card.Title>
                   <Card.Text className="text-secondary">Explore our showroom featuring meticulously detailed big bikes ready for their next owner.</Card.Text>
@@ -135,7 +131,7 @@ const About = () => {
             </Col>
             <Col md={6} lg={4}>
               <Card className="bg-transparent border-0 overflow-hidden h-100" style={{ borderRadius: '12px' }}>
-                <Card.Img variant="top" src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?q=80&w=1470&auto=format&fit=crop" style={{ height: '250px', objectFit: 'cover' }} />
+                <Card.Img variant="top" src={brandConfig.images.experienceCard2} style={{ height: '250px', objectFit: 'cover' }} />
                 <Card.Body className="p-4" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderTop: 'none', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px' }}>
                   <Card.Title className="text-white fw-bold mb-2">Honest Notes</Card.Title>
                   <Card.Text className="text-secondary">Complete transparency. We provide a full breakdown of every unit's condition so you can buy with confidence.</Card.Text>
@@ -144,7 +140,7 @@ const About = () => {
             </Col>
             <Col md={12} lg={4}>
               <Card className="bg-transparent border-0 overflow-hidden h-100" style={{ borderRadius: '12px' }}>
-                <Card.Img variant="top" src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1470&auto=format&fit=crop" style={{ height: '250px', objectFit: 'cover' }} />
+                <Card.Img variant="top" src={brandConfig.images.experienceCard3} style={{ height: '250px', objectFit: 'cover' }} />
                 <Card.Body className="p-4" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderTop: 'none', borderBottomLeftRadius: '12px', borderBottomRightRadius: '12px' }}>
                   <Card.Title className="text-white fw-bold mb-2">The Community</Card.Title>
                   <Card.Text className="text-secondary">More than a showroom. We are a hub for riders who share a passion for the open road and the motorcycle lifestyle.</Card.Text>

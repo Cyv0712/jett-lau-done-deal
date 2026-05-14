@@ -31,7 +31,7 @@ const Buyers = () => {
       <section className="section-padding py-5">
         <Container>
           <Row className="g-4">
-            {buyersData.slice(3).map((buyer) => (
+            {buyersData.map((buyer) => (
               <Col lg={6} key={buyer.id}>
                 <div className="buyer-card h-100 d-flex flex-column" style={{
                   backgroundColor: 'var(--bg-card)',
