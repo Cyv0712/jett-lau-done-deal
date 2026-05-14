@@ -2,8 +2,8 @@ export const showcaseBikes = [
   {
     slug: 'honda-africa-twin',
     brand: 'Honda',
-    model: 'CRF1100L Africa Twin',
-    searchModel: 'Africa Twin',
+    model: 'Africa Twin 1100',
+    searchModel: 'Honda Africa Twin 1100',
     images: [
       '/static_data/africatwin_1.jpg',
       '/static_data/africatwin_2.jpg',
@@ -22,7 +22,7 @@ export const showcaseBikes = [
     slug: 'yamaha-tracer-900',
     brand: 'Yamaha',
     model: 'Tracer 900 GT',
-    searchModel: 'Tracer 900',
+    searchModel: 'Yamaha Tracer 900 GT',
     images: [
       '/static_data/tracer_1.jpg',
       '/static_data/tracer_2.jpg',
@@ -41,7 +41,7 @@ export const showcaseBikes = [
     slug: 'kawasaki-versys-650',
     brand: 'Kawasaki',
     model: 'Versys 650',
-    searchModel: 'Versys 650',
+    searchModel: 'Kawasaki Versys 650',
     images: [
       '/static_data/versys650_1.jpg',
       '/static_data/versys650_2.jpg',

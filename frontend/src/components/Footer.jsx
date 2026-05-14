@@ -48,10 +48,7 @@ const Footer = () => {
           <Col lg={4} md={8} className="offset-lg-1">
             <h5 className="moto-heading mb-4" style={{ fontSize: '1.1rem', letterSpacing: '1px' }}>CONTACT US</h5>
             <ul className="list-unstyled d-flex flex-column gap-4 text-secondary" style={{ fontSize: '0.95rem' }}>
-              <li className="d-flex align-items-start gap-3">
-                <MapPin size={22} className="text-accent mt-1 flex-shrink-0" />
-                <span style={{ lineHeight: '1.5' }}>{contactInfo.address}</span>
-              </li>
+              {/* Address removed as per new business model */}
               <li className="d-flex align-items-center gap-3">
                 <Phone size={22} className="text-accent flex-shrink-0" />
                 <span>{contactInfo.phone}</span>

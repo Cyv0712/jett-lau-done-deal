@@ -31,7 +31,7 @@ const Buyers = () => {
       <section className="section-padding py-5">
         <Container>
           <Row className="g-4">
-            {buyersData.slice(3).map((buyer) => (
+            {buyersData.map((buyer) => (
               <Col lg={6} key={buyer.id}>
                 <div className="moto-card h-100 overflow-hidden">
                   <Row className="g-0 h-100">
@@ -43,7 +43,7 @@ const Buyers = () => {
                           className="w-100 h-100" 
                           style={{ objectFit: 'cover', minHeight: '280px' }} 
                         />
-                        <div className="position-absolute bottom-0 start-0 w-100 p-2 text-white bg-dark bg-opacity-75" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+                        <div className="position-absolute bottom-0 start-0 w-100 p-2 text-accent bg-dark bg-opacity-75" style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '1px' }}>
                            {buyer.location.toUpperCase()}
                         </div>
                       </div>
@@ -55,7 +55,7 @@ const Buyers = () => {
                       <div className="mt-4 pt-3" style={{ borderTop: '1px solid var(--border-color)' }}>
                         <h5 className="moto-heading mb-1" style={{ fontSize: '1.2rem', textTransform: 'none' }}>{buyer.name}</h5>
                         <div className="d-flex justify-content-between align-items-center">
-                          <span className="text-muted" style={{ fontSize: '0.85rem' }}>{buyer.location}</span>
+                          <span className="text-accent" style={{ fontSize: '0.85rem', fontWeight: 600 }}>{buyer.location}</span>
                           <div className="text-end">
                             <span className="text-accent fw-bold d-block" style={{ fontSize: '0.7rem', textTransform: 'uppercase' }}>ACQUIRED UNIT</span>
                             <span className="text-primary fw-bold" style={{ fontSize: '0.9rem' }}>{buyer.bike}</span>

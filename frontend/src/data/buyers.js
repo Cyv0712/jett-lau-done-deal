@@ -1,106 +1,82 @@
 export const buyersData = [
   {
     id: 1,
-    name: 'Kuya Ben',
-    location: 'Marikina City',
-    bike: 'Honda Africa Twin',
-    quote: 'Sobrang daling kausap ni sir Kenji! The bike was exactly as described, no hidden issues. Ready for our next long ride up North. Salamat sa tiwala!',
-    image: '/static_data/testimony_1.jpg'
+    name: 'Migs',
+    location: 'Antipolo City',
+    bike: 'Honda CB650R',
+    quote: 'Grabe yung quality ng mga motor nila, parang inilabas lang sa casa. Walang gasgas, sariwang-sariwa at super kinis ng CB650R ko!',
+    image: '/static_data/buyer1_cb650R.jpg'
   },
   {
     id: 2,
-    name: 'Mark & Sarah',
-    location: 'Cebu City (Shipped)',
-    bike: 'BMW R 1250 GS',
-    quote: 'Kahit nasa Cebu kami, smooth ang transaction at shipping. Very professional and transparent with the papers. Maraming salamat Katingin Bikes!',
-    image: '/static_data/testimony_2.jpg'
+    name: 'Mark',
+    location: 'Pasig City',
+    bike: 'Honda CBR650R',
+    quote: 'Akala ko brand new yung nakuha ko! Sobrang linis ng makina at alagang-alaga yung kaha ng CBR650R. Best quality talaga.',
+    image: '/static_data/buyer2_CBR650R.jpg'
   },
   {
     id: 3,
     name: 'Boss Rico',
     location: 'Quezon City',
-    bike: 'Ducati Multistrada',
-    quote: 'I\'ve bought multiple bikes from them. Laging quality at alagang-alaga ang mga units. The best premium bigbike dealer sa buong Metro Manila!',
-    image: '/static_data/testimony_3.jpg'
+    bike: 'Honda Rebel 500',
+    quote: 'Ibang klase yung standards nila sa pag-maintain ng units. Walang kalampag, tahimik ang makina, at napakakinis nung Rebel 500 ko.',
+    image: '/static_data/buyer3_Rebel500.jpg'
   },
   {
     id: 4,
     name: 'Jay Ar',
-    location: 'Baguio City',
-    bike: 'Kawasaki Z1000R',
-    quote: 'The unit I got was pristine. Grabe ang attention to detail sa inspection nila. Sulit ang byahe from Baguio to QC just to pick this up!',
-    image: 'https://images.unsplash.com/photo-1558980664-769d59546b3d?q=80&w=1470&auto=format&fit=crop'
+    location: 'Caloocan City',
+    bike: 'Kawasaki Ninja ZX-10R',
+    quote: 'Makinis pa sa bago! Honest sila sa condition ng motor. Pagkakita ko sa personal ng ZX-10R, napa-wow na lang ako sa quality.',
+    image: '/static_data/buyer4_ZX10R.jpg'
   },
   {
     id: 5,
     name: 'Elena',
     location: 'Makati City',
-    bike: 'Triumph Tiger 900',
-    quote: 'As a female rider, I appreciate the respectful and straightforward process. No upselling, just honest advice about which bike suits my riding style.',
-    image: 'https://images.unsplash.com/photo-1620054366601-5e758aab5eb6?q=80&w=1470&auto=format&fit=crop'
+    bike: 'Honda CB650R',
+    quote: 'Sobrang ganda ng condition ng unit. Amoy bago pa at alagang-alaga yung CB650R. Panalo yung quality inspection nila bago i-release.',
+    image: '/static_data/buyer5_cb650R.jpg'
   },
   {
     id: 6,
-    name: 'Team North',
+    name: 'Jomar',
     location: 'Pampanga',
-    bike: 'Yamaha MT-09 & Tracer 9',
-    quote: 'We bought two units simultaneously for our riding group. Nakuha namin ng magandang deal at super linis ng parehong motor. Best deal talaga!',
-    image: 'https://images.unsplash.com/photo-1596700078028-a400f930e461?q=80&w=1470&auto=format&fit=crop'
+    bike: 'Kawasaki Z1000R',
+    quote: 'Walang sakit sa ulo. Yung Z1000R na kinuha ko, 100% stock at napakalinis ng kaha. Halatang piling-pili yung mga units nila.',
+    image: '/static_data/buyer6_Z1000R.jpg'
   },
   {
     id: 7,
     name: 'Carlos',
     location: 'Alabang',
-    bike: 'Harley-Davidson Iron 883',
-    quote: 'First time buying a cruiser and Kenji helped me understand everything. The bike runs like a dream. Highly recommended!',
-    image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1470&auto=format&fit=crop'
+    bike: 'Honda CBR500R',
+    quote: 'Hindi ako nagsisi na dito ako kumuha ng first sportbike ko. Yung CBR500R parang hindi nagamit sa sobrang sariwa at kinis.',
+    image: '/static_data/buyer7_CBR500R.jpg'
   },
   {
     id: 8,
-    name: 'Migs',
-    location: 'Antipolo City',
+    name: 'Dennis',
+    location: 'Marikina City',
     bike: 'Kawasaki Ninja ZX-10R',
-    quote: 'Literally my dream bike. The paperwork was handled so fast, I was riding the same afternoon. Thanks for the seamless transaction!',
-    image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1470&auto=format&fit=crop'
+    quote: 'Kakaiba yung kinis ng ZX-10R nila, walang tago. Makikita mo talagang inalagaan at quality ang mga units na binebenta dito.',
+    image: '/static_data/buyer8_ZX10R.jpg'
   },
   {
     id: 9,
-    name: 'Dennis',
-    location: 'Iloilo (Shipped)',
-    bike: 'Honda CBR1000RR',
-    quote: 'Was hesitant to buy a liter bike online, but Kenji sent detailed videos of the engine sound and scratches. True honest notes! Arrived safely in Iloilo.',
-    image: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?q=80&w=1470&auto=format&fit=crop'
+    name: 'Sir Jun',
+    location: 'Taguig City',
+    bike: 'Honda CBR1000RR-R SP',
+    quote: 'Pang-showroom talaga yung quality ng CBR1000RR-R SP na nakuha ko. Walang issue, immaculate condition, gagamitin na lang sa track.',
+    image: '/static_data/buyer9_CBR1000RR-RSP.jpg'
   },
   {
     id: 10,
-    name: 'Sir Jun',
-    location: 'Taguig City',
-    bike: 'BMW S1000XR',
-    quote: 'Traded in my old bike for this touring beast. The trade-in value was fair, and the new bike is immaculate. Great service bay too!',
-    image: 'https://images.unsplash.com/photo-1558981285-6f0c94958bb6?q=80&w=1470&auto=format&fit=crop'
-  },
-  {
-    id: 11,
-    name: 'Anton',
+    name: 'Anton & Maria',
     location: 'Bulacan',
-    bike: 'KTM 390 Adventure',
-    quote: 'Perfect starter adventure bike. Katingin Bikes made sure it was fully serviced before handing over the keys. 10/10.',
-    image: 'https://images.unsplash.com/photo-1487147264018-f937fba0c817?q=80&w=1470&auto=format&fit=crop'
-  },
-  {
-    id: 12,
-    name: 'Ramon',
-    location: 'Las Piñas',
-    bike: 'Ducati Panigale V4',
-    quote: 'You don\'t just buy a bike here, you buy peace of mind. The detailing on this Panigale was showroom-level when I picked it up.',
-    image: 'https://images.unsplash.com/photo-1558980394-0a06c4631733?q=80&w=1470&auto=format&fit=crop'
-  },
-  {
-    id: 13,
-    name: 'Chef Paulo',
-    location: 'Pasig City',
-    bike: 'Yamaha XSR900',
-    quote: 'Love the retro vibe. The transaction took less than an hour. They even helped me load it onto my pickup truck. Solid team!',
-    image: 'https://images.unsplash.com/photo-1596700078028-a400f930e461?q=80&w=1470&auto=format&fit=crop'
+    bike: 'Honda X-ADV 750',
+    quote: 'Bilang mag-asawa na mahilig sa rides, napaka-importante samin ng quality. Yung X-ADV 750 na nakuha namin, super sariwa at walang sablay.',
+    image: '/static_data/buyer10_XADV750.jpg'
   }
 ];

@@ -14,14 +14,19 @@ const FeaturedBikes = () => {
       .then(res => res.json())
       .then(data => {
         const inStockOnly = data.filter(bike => bike.status === 'Available' || !bike.status);
-        const modelsInStock = inStockOnly.map(bike => bike.model.toLowerCase());
-        setInventoryModels(modelsInStock);
+        // Create full identity strings (e.g. "Kawasaki Versys 650")
+        const identitiesInStock = inStockOnly.map(bike => {
+          const cleanCC = bike.engineSize?.replace('CC', '').trim() || '';
+          return `${bike.brand} ${bike.model} ${cleanCC}`.toLowerCase().replace(/\s+/g, ' ').trim();
+        });
+        setInventoryModels(identitiesInStock);
       })
       .catch(err => console.error(err));
   }, []);
 
-  const checkStock = (searchModel) => {
-    return inventoryModels.includes(searchModel.toLowerCase());
+  const checkStock = (searchName) => {
+    const target = searchName.toLowerCase().replace(/\s+/g, ' ').trim();
+    return inventoryModels.includes(target);
   };
 
   return (
@@ -41,8 +46,8 @@ const FeaturedBikes = () => {
 
             return (
               <Col lg={4} md={6} key={bike.slug}>
-                <Reveal delay={(index % 3) + 1}>
-                  <div className="moto-card d-flex flex-column">
+                <Reveal delay={(index % 3) + 1} className="h-100">
+                  <div className="moto-card d-flex flex-column h-100">
                     <div className="position-absolute top-0 end-0 p-3" style={{ zIndex: 10 }}>
                       {inStock ? (
                         <Badge className="bg-success" style={{ fontSize: '0.75rem', padding: '6px 12px', fontWeight: 600 }}>AVAILABLE</Badge>
@@ -52,14 +57,14 @@ const FeaturedBikes = () => {
                     </div>
 
                     <div className="bike-img-wrapper" style={{ height: '400px', overflow: 'hidden' }}>
-                      <Carousel interval={null} slide={true}>
+                      <Carousel interval={null} slide={true} className="h-100">
                         {bike.images.map((imgSrc, idx) => (
-                          <Carousel.Item key={idx}>
+                          <Carousel.Item key={idx} className="h-100">
                             <img
                               src={imgSrc}
                               alt={`${bike.model} angle ${idx + 1}`}
-                              className="d-block w-100"
-                              style={{ height: '400px', objectFit: 'cover', objectPosition: 'top' }}
+                              className="d-block w-100 h-100"
+                              style={{ objectFit: 'cover', objectPosition: 'top' }}
                             />
                           </Carousel.Item>
                         ))}
@@ -73,7 +78,7 @@ const FeaturedBikes = () => {
                       <p className="text-secondary mb-4 flex-grow-1" style={{ fontSize: '0.9rem', lineHeight: '1.6' }}>
                         {bike.description}
                       </p>
-                      <div className="mt-auto pt-3">
+                      <div className="pt-3">
                         <Link 
                           to={`/showcase/${bike.slug}`} 
                           className="moto-btn moto-btn-outline w-100"

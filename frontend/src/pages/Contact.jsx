@@ -75,62 +75,24 @@ const Contact = () => {
                 </div>
                 <h4 className="moto-heading mb-2" style={{ fontSize: '1.2rem' }}>EMAIL US</h4>
                 <p className="text-secondary mb-4">{contactInfo.email}</p>
-                <div className="text-secondary small mt-auto">GENERAL INQUIRIES</div>
+                <div className="text-accent small fw-bold mt-auto" style={{ fontSize: '0.7rem' }}>FOR FINANCING REQUIREMENTS ONLY</div>
               </div>
             </Col>
           </Row>
 
           <Row className="justify-content-center">
-            <Col lg={10}>
-              <div className="moto-card p-5">
-                <Row className="g-4 text-center text-md-start">
-                  <Col md={6}>
-                    <div className="d-flex flex-column flex-md-row align-items-center gap-4">
-                      <div className="d-flex align-items-center justify-content-center flex-shrink-0 bg-void rounded" style={{ color: 'var(--accent-primary)', width: '60px', height: '60px' }}>
-                        <MapPin size={24} />
-                      </div>
-                      <div>
-                        <h5 className="moto-heading mb-2" style={{ fontSize: '1.1rem' }}>SHOWROOM LOCATION</h5>
-                        <p className="text-secondary mb-3" style={{ fontSize: '0.9rem' }}>{contactInfo.address}</p>
-                        <a href={contactInfo.googleMaps} target="_blank" rel="noreferrer" className="moto-btn" style={{ padding: '6px 16px', fontSize: '0.8rem' }}>
-                          OPEN IN MAPS <ExternalLink size={12} className="ms-2" />
-                        </a>
-                      </div>
-                    </div>
-                  </Col>
-                  <Col md={6}>
-                    <div className="d-flex flex-column flex-md-row align-items-center gap-4">
-                      <div className="d-flex align-items-center justify-content-center flex-shrink-0 bg-void rounded" style={{ color: 'var(--accent-primary)', width: '60px', height: '60px' }}>
-                        <Clock size={24} />
-                      </div>
-                      <div>
-                        <h5 className="moto-heading mb-2" style={{ fontSize: '1.1rem' }}>OPERATING HOURS</h5>
-                        <p className="text-secondary mb-0" style={{ fontSize: '0.9rem' }}>{contactInfo.operatingHours}</p>
-                        <div className="mt-2 text-accent" style={{ fontSize: '0.8rem', fontWeight: 600 }}>AVAILABLE FOR VIEWING</div>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
+            <Col lg={6}>
+              <div className="moto-card p-5 text-center">
+                <div className="d-flex align-items-center justify-content-center flex-shrink-0 bg-void rounded-circle mx-auto mb-4" style={{ color: 'var(--accent-primary)', width: '70px', height: '70px' }}>
+                  <Clock size={28} />
+                </div>
+                <h5 className="moto-heading mb-2" style={{ fontSize: '1.3rem' }}>OPERATING HOURS</h5>
+                <p className="text-secondary mb-0" style={{ fontSize: '1.05rem' }}>{contactInfo.operatingHours}</p>
+                <div className="mt-3 text-accent" style={{ fontSize: '0.85rem', fontWeight: 600, letterSpacing: '2px' }}>UNIT VIEWING BY APPOINTMENT ONLY</div>
               </div>
             </Col>
           </Row>
         </Container>
-      </section>
-
-      {/* ── 4. Map Section ── */}
-      <section className="mt-5">
-        <div style={{ width: '100%', height: '450px', filter: 'grayscale(0.8) contrast(1.1) brightness(0.9)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3860.0000000000005!2d121.05000000000001!3d14.650000000000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x74a75f5b6bf8d21f!2sKatingin%20Bikes!5e0!3m2!1sen!2sph!4v1715516000000!5m2!1sen!2sph" 
-            width="100%" 
-            height="100%" 
-            style={{ border: 0 }} 
-            allowFullScreen="" 
-            loading="lazy" 
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Katingin Bikes Location"
-          ></iframe>
-        </div>
       </section>
     </div>
   );

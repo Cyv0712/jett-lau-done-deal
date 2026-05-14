@@ -53,8 +53,8 @@ const About = () => {
               </div>
             </Col>
             <Col lg={6}>
-              <div className="position-relative p-2">
-                <div className="moto-card overflow-hidden p-0 border-0">
+              <div className="position-relative p-2 d-flex justify-content-center">
+                <div className="moto-card overflow-hidden p-0 border-0" style={{ maxWidth: '85%' }}>
                   <img
                     src={brandConfig.images.storyImage}
                     alt={brandConfig.name}
