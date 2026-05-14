@@ -1,5 +1,6 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaArrowRight } from 'react-icons/fa';
+import { brandConfig } from '../data/brandConfig';
 
 const HeroSection = () => {
   return (
@@ -7,19 +8,19 @@ const HeroSection = () => {
       <Container>
         <Row>
           <Col lg={8}>
-            <span className="hero-subtitle">Premium Second-Hand Bigbikes</span>
+            <span className="hero-subtitle">{brandConfig.description.split(' ')[0]} {brandConfig.description.split(' ')[1]} {brandConfig.description.split(' ')[2]}</span>
             <h1 className="hero-title">
               CONQUER EVERY <br />
               <span className="text-accent">ADVENTURE</span>
             </h1>
             <p className="lead mb-5 text-secondary" style={{ maxWidth: '600px' }}>
-              The Philippines' most trusted dealer for premium second-hand adventure and touring motorcycles. Fully inspected, ready to ride.
+              {brandConfig.aboutHeroDescription}
             </p>
             <div className="d-flex gap-3">
               <button className="btn-accent d-flex align-items-center gap-2">
                 View Inventory <FaArrowRight />
               </button>
-              <button className="btn-accent" style={{ background: 'transparent', border: '1px solid white' }}>
+              <button className="btn-accent" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.4)' }}>
                 Contact Us
               </button>
             </div>

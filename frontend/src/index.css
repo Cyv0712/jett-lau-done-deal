@@ -2,13 +2,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
 :root {
-  --bg-dark: #0a0a0a;
-  --bg-card: #171717;
-  --accent-color: #ff3b30;
-  --text-primary: #ffffff;
-  --text-secondary: #a3a3a3;
+  --bg-dark:        #0b0b0f;
+  --bg-card:        #131318;
+  --accent-color:   #f97316;   /* Vivid orange — energetic, premium */
+  --accent-hover:   #ea6d0e;
+  --text-primary:   #f0f0f4;
+  --text-secondary: #8888a0;
+  --border-subtle:  rgba(255,255,255,0.07);
 }
 
+/* ── Base ── */
 body {
   background-color: var(--bg-dark);
   color: var(--text-primary);
@@ -18,158 +21,141 @@ body {
   overflow-x: hidden;
 }
 
-/* Typography */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* ── Typography ── */
+h1, h2, h3, h4, h5, h6 {
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 
-.text-accent {
-  color: var(--accent-color) !important;
-}
+.text-accent    { color: var(--accent-color) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
 
-.text-secondary {
-  color: var(--text-secondary) !important;
-}
-
-/* Buttons */
+/* ── Buttons ── */
 .btn-accent {
   background-color: var(--accent-color);
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 12px 28px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
+  letter-spacing: 1.2px;
+  transition: all 0.28s ease;
 }
-
 .btn-accent:hover {
-  background-color: #e6352b;
+  background-color: var(--accent-hover);
+  color: #fff;
   transform: translateY(-2px);
-  color: white;
-  box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
+  box-shadow: 0 6px 24px rgba(249, 115, 22, 0.35);
 }
 
-/* Navbar */
+/* ── Navbar ── */
 .glass-nav {
-  background: rgba(10, 10, 10, 0.8) !important;
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 15px 0;
+  background: rgba(11, 11, 15, 0.88) !important;
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 14px 0;
 }
-
 .nav-link {
   color: var(--text-primary) !important;
   font-weight: 600;
   margin: 0 10px;
-  transition: color 0.3s ease;
+  transition: color 0.25s;
 }
-
-.nav-link:hover {
+.nav-link:hover { color: var(--accent-color) !important; }
+.nav-link-item {
+  position: relative;
+}
+.nav-link-item::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--accent-color);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+.nav-link-item.nav-link-active {
   color: var(--accent-color) !important;
+}
+.nav-link-item.nav-link-active::after {
+  transform: scaleX(1);
 }
 
 .navbar-brand {
   font-weight: 800;
   font-size: 1.5rem;
   color: white !important;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
 }
 
-/* Hero Section */
+/* ── Hero ── */
 .hero-section {
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background-image: linear-gradient(to right, rgba(10, 10, 10, 0.9) 0%, rgba(10, 10, 10, 0.4) 100%), url('https://images.unsplash.com/photo-1558980664-769d59546b3d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-image:
+    linear-gradient(to right, rgba(11,11,15,0.92) 0%, rgba(11,11,15,0.55) 100%),
+    url('https://images.unsplash.com/photo-1558980664-769d59546b3d?q=80&w=1470&auto=format&fit=crop');
   background-size: cover;
   background-position: center;
   padding-top: 76px;
 }
-
 .hero-subtitle {
-  font-size: 1.2rem;
+  font-size: 1rem;
   text-transform: uppercase;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   color: var(--accent-color);
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 15px;
   display: block;
 }
-
 .hero-title {
   font-size: 4.5rem;
-  line-height: 1.1;
+  line-height: 1.08;
   margin-bottom: 25px;
 }
 
-/* Featured Bikes */
-.section-padding {
-  padding: 100px 0;
-}
-
+/* ── Sections ── */
+.section-padding { padding: 100px 0; }
 .section-title {
   font-size: 2.5rem;
   margin-bottom: 50px;
   text-align: center;
 }
 
+/* ── Bike Cards ── */
 .bike-card {
   background-color: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   height: 100%;
 }
-
 .bike-card:hover {
-  transform: translateY(-15px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-  border-color: rgba(255, 59, 48, 0.3);
+  transform: translateY(-14px);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.65), 0 0 0 1px rgba(249,115,22,0.25);
+  border-color: rgba(249, 115, 22, 0.3);
 }
-
-.bike-img-wrapper {
-  height: 240px;
-  overflow: hidden;
-}
-
+.bike-img-wrapper { height: 240px; overflow: hidden; }
 .bike-img {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
-
-.bike-card:hover .bike-img {
-  transform: scale(1.1);
+.bike-card:hover .bike-img { transform: scale(1.08); }
+.bike-details { padding: 25px; }
+.bike-title  { font-size: 1.5rem; margin-bottom: 10px; }
+.bike-specs  {
+  display: flex; gap: 15px; margin-bottom: 20px;
+  color: var(--text-secondary); font-size: 0.9rem;
 }
-
-.bike-details {
-  padding: 25px;
-}
-
-.bike-title {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.bike-specs {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
 .bike-price {
   font-size: 1.8rem;
   color: var(--accent-color);
@@ -177,148 +163,115 @@ h6 {
   margin-bottom: 0;
 }
 
-/* About Section */
-.about-section {
-  background-color: var(--bg-card);
-  position: relative;
-}
-
+/* ── About Section ── */
+.about-section { background-color: var(--bg-card); position: relative; }
 .feature-box {
-  padding: 30px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  height: 100%;
-  transition: all 0.3s ease;
+  padding: 30px; border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-subtle);
+  height: 100%; transition: all 0.3s ease;
 }
-
 .feature-box:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--accent-color);
+  background: rgba(249, 115, 22, 0.06);
+  border-color: rgba(249, 115, 22, 0.3);
 }
-
 .feature-icon {
   font-size: 2.5rem;
   color: var(--accent-color);
   margin-bottom: 20px;
 }
 
-/* Buyer Cards */
+/* ── Buyer Cards ── */
 .buyer-card {
   background-color: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.3s ease;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px; overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .buyer-card:hover {
   transform: translateY(-10px);
-  border-color: rgba(255, 59, 48, 0.3);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+  border-color: rgba(249, 115, 22, 0.25);
 }
-
-.buyer-img-wrapper {
-  height: 320px;
-  overflow: hidden;
-}
-
+.buyer-img-wrapper { height: 320px; overflow: hidden; }
 .buyer-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 20%;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 20%;
 }
+.buyer-content { padding: 25px; }
 
-.buyer-content {
-  padding: 25px;
-}
-
-/* Footer */
+/* ── Footer ── */
 .footer {
-  background-color: #050505;
+  background-color: #08080c;
   padding: 60px 0 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--border-subtle);
 }
-
-.footer-brand {
-  font-size: 1.8rem;
-  font-weight: 800;
-  margin-bottom: 20px;
-}
-
+.footer-brand { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; }
 .social-links a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  margin-right: 10px;
-  transition: all 0.3s ease;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,0.07); border: 1px solid var(--border-subtle);
+  color: white; margin-right: 10px; transition: all 0.3s ease;
 }
-
 .social-links a:hover {
   background: var(--accent-color);
+  border-color: var(--accent-color);
   transform: translateY(-3px);
 }
 
-/* Brand Marquee */
+/* ── Brand Marquee ── */
 .marquee-container {
-  overflow: hidden;
-  white-space: nowrap;
+  overflow: hidden; white-space: nowrap;
   background-color: transparent;
-  padding: 40px 0;
-  margin-top: 40px;
-  display: flex;
-  align-items: center;
+  padding: 40px 0; margin-top: 40px;
+  display: flex; align-items: center;
 }
-
 .marquee-content {
   display: inline-block;
   animation: marquee 30s linear infinite;
 }
-
-/* Pause the scrolling when hovering over it */
-.marquee-container:hover .marquee-content {
-  animation-play-state: paused;
-}
-
+.marquee-container:hover .marquee-content { animation-play-state: paused; }
 .brand-logo {
-  display: inline-block;
-  margin: 0 50px;
-  height: 60px;
-  /* Fixed height so they all align perfectly */
+  display: inline-block; margin: 0 50px; height: 60px;
   object-fit: contain;
-  /* CSS Magic: Invert makes the white background black and the logo white.
-     mix-blend-mode: screen makes the black background completely invisible! */
-  filter: invert(1) opacity(60%);
-  mix-blend-mode: screen;
-  transition: all 0.3s ease;
-  cursor: default;
+  filter: invert(1) opacity(55%);
+  mix-blend-mode: screen; transition: all 0.3s ease; cursor: default;
 }
-
-.brand-logo:hover {
-  filter: invert(1) opacity(100%);
-  transform: scale(1.05);
-}
-
+.brand-logo:hover { filter: invert(1) opacity(100%); transform: scale(1.06); }
 .brand-logo.no-invert {
-  filter: grayscale(100%) opacity(75%) brightness(1.2);
-  mix-blend-mode: normal;
+  filter: grayscale(100%) invert(1) opacity(55%); mix-blend-mode: screen;
+}
+.brand-logo.no-invert:hover { filter: grayscale(100%) invert(1) opacity(100%); transform: scale(1.06); }
+
+/* ── Skeleton Loading ── */
+@keyframes skeleton-pulse {
+  0%, 100% { background-color: rgba(255,255,255,0.05); }
+  50%       { background-color: rgba(255,255,255,0.11); }
+}
+.skeleton-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px; overflow: hidden; height: 100%;
+}
+.skeleton-img { width: 100%; height: 200px; animation: skeleton-pulse 1.5s ease-in-out infinite; }
+.skeleton-body { padding: 20px; }
+.skeleton-line {
+  height: 14px; border-radius: 6px; margin-bottom: 12px;
+  width: 100%; animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+.skeleton-line.short  { width: 50%; animation-delay: 0.1s; }
+.skeleton-line.medium { width: 70%; animation-delay: 0.2s; }
+.skeleton-divider {
+  height: 1px; background: rgba(255,255,255,0.08); margin: 14px 0;
 }
 
-.brand-logo.no-invert:hover {
-  filter: grayscale(0%) opacity(100%);
+/* ── Inventory filter inputs ── */
+.inventory-filter-input:focus {
+  outline: none;
+  border-color: rgba(249, 115, 22, 0.5) !important;
 }
 
 @keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }

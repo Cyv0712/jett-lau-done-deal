@@ -1,19 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
 const Bike = require('../models/Bike');
+const { persistUploadedImages, deleteBikeImages } = require('../utils/imageStorage');
 
-// Configure multer for image upload
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
-const upload = multer({ storage: storage });
 
 // Get all bikes
 router.get('/', async (req, res) => {
@@ -36,15 +30,16 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create a bike
-router.post('/', upload.single('image'), async (req, res) => {
-  const bikeData = { ...req.body };
-  if (req.file) {
-    bikeData.image = `/uploads/${req.file.filename}`;
-  }
-
-  const bike = new Bike(bikeData);
+// Create a bike — accepts multiple images
+router.post('/', upload.array('images', 10), async (req, res) => {
   try {
+    const bikeData = { ...req.body };
+
+    if (req.files?.length) {
+      bikeData.images = await persistUploadedImages(req.files);
+    }
+
+    const bike = new Bike(bikeData);
     const newBike = await bike.save();
     res.status(201).json(newBike);
   } catch (err) {
@@ -52,15 +47,34 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-// Update a bike
-router.put('/:id', upload.single('image'), async (req, res) => {
-  const bikeData = { ...req.body };
-  if (req.file) {
-    bikeData.image = `/uploads/${req.file.filename}`;
-  }
-
+// Update a bike — accepts multiple images
+router.put('/:id', upload.array('images', 10), async (req, res) => {
   try {
+    const existing = await Bike.findById(req.params.id);
+    if (!existing) return res.status(404).json({ message: 'Bike not found' });
+
+    const bikeData = { ...req.body };
+
+    if (req.files?.length) {
+      await deleteBikeImages(existing.images);
+      bikeData.images = await persistUploadedImages(req.files);
+    }
+
     const updatedBike = await Bike.findByIdAndUpdate(req.params.id, bikeData, { new: true });
+    res.json(updatedBike);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Mark a bike as sold
+router.patch('/:id/sold', async (req, res) => {
+  try {
+    const updatedBike = await Bike.findByIdAndUpdate(
+      req.params.id,
+      { status: 'Sold' },
+      { new: true }
+    );
     if (!updatedBike) return res.status(404).json({ message: 'Bike not found' });
     res.json(updatedBike);
   } catch (err) {
@@ -68,23 +82,16 @@ router.put('/:id', upload.single('image'), async (req, res) => {
   }
 });
 
-// Delete a bike
+// Delete a bike — removes associated disk files and Cloudinary assets
 router.delete('/:id', async (req, res) => {
   try {
     const bike = await Bike.findById(req.params.id);
     if (!bike) return res.status(404).json({ message: 'Bike not found' });
 
-    // Delete the associated image file from the disk
-    if (bike.image && bike.image.startsWith('/uploads')) {
-      const fs = require('fs');
-      const imagePath = path.join(__dirname, '..', bike.image);
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
-      }
-    }
+    await deleteBikeImages(bike.images);
 
     await Bike.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Bike and image deleted' });
+    res.json({ message: 'Bike and all associated images deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

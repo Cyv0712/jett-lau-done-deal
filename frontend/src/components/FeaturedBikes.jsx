@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Container, Row, Col, Badge, Carousel } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { showcaseBikes } from '../data/showcase';
+import { apiUrl } from '../config/api';
 
 const FeaturedBikes = () => {
   const [inventoryModels, setInventoryModels] = useState([]);
@@ -9,10 +10,11 @@ const FeaturedBikes = () => {
 
   useEffect(() => {
     // Fetch live inventory to check stock status
-    fetch('http://localhost:5000/api/bikes')
+    fetch(apiUrl('/api/bikes'))
       .then(res => res.json())
       .then(data => {
-        const modelsInStock = data.map(bike => bike.model.toLowerCase());
+        const inStockOnly = data.filter(bike => bike.status === 'Available' || !bike.status);
+        const modelsInStock = inStockOnly.map(bike => bike.model.toLowerCase());
         setInventoryModels(modelsInStock);
       })
       .catch(err => console.error(err));

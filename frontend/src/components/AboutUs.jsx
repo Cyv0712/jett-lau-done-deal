@@ -1,5 +1,6 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaShieldAlt, FaCheckDouble, FaFileContract } from 'react-icons/fa';
+import { brandConfig } from '../data/brandConfig';
 
 const AboutUs = () => {
   return (
@@ -8,7 +9,7 @@ const AboutUs = () => {
         <Row className="align-items-center mb-5">
           <Col lg={6}>
             <h2 className="section-title text-start mb-4">
-              WHY CHOOSE <span className="text-accent">JETT LAU</span>
+              WHY CHOOSE <span className="text-accent">{brandConfig.name}</span>
             </h2>
             <p className="text-secondary lead mb-4">
               We don't just sell motorcycles; we deliver the promise of adventure. Every bigbike in our showroom is meticulously vetted to ensure you get nothing but the best.

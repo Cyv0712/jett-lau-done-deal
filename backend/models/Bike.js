@@ -14,7 +14,8 @@ const BikeSchema = new mongoose.Schema({
   power: { type: String },
   transmission: { type: String },
   fuelCapacity: { type: String },
-  image: { type: String } // URL or file path
+  images: { type: [String], default: [] }, // Array to support multiple photos per bike
+  status: { type: String, default: 'Available', enum: ['Available', 'Sold'] }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Bike', BikeSchema);

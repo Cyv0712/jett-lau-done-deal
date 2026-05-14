@@ -1,33 +1,11 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaQuoteLeft } from 'react-icons/fa';
 
+import { buyersData } from '../data/buyers';
+
 const HappyBuyers = () => {
-  const buyers = [
-    {
-      id: 1,
-      name: 'Kuya Ben',
-      location: 'Marikina City',
-      bike: 'Honda Africa Twin',
-      quote: 'Sobrang daling kausap ni sir Jett! The bike was exactly as described, no hidden issues. Ready for our next long ride up North. Salamat sa tiwala!',
-      image: '/static_data/testimony_1.jpg'
-    },
-    {
-      id: 2,
-      name: 'Mark & Sarah',
-      location: 'Cebu City (Shipped)',
-      bike: 'BMW R 1250 GS',
-      quote: 'Kahit nasa Cebu kami, smooth ang transaction at shipping. Very professional and transparent with the papers. Maraming salamat Jett Lau Done Deal!',
-      image: '/static_data/testimony_2.jpg'
-    },
-    {
-      id: 3,
-      name: 'Boss Rico',
-      location: 'Quezon City',
-      bike: 'Ducati Multistrada',
-      quote: 'I\'ve bought multiple bikes from them. Laging quality at alagang-alaga ang mga units. The best premium bigbike dealer sa buong Metro Manila!',
-      image: '/static_data/testimony_3.jpg'
-    }
-  ];
+  // Only show the first 3 buyers on the landing page
+  const featuredBuyers = buyersData.slice(0, 3);
 
   return (
     <section id="buyers" className="section-padding" style={{ backgroundColor: '#0a0a0a' }}>
@@ -40,7 +18,7 @@ const HappyBuyers = () => {
           <p className="text-secondary mt-3">Salamat sa tiwala! Join our growing community of premium bigbike owners across the Philippines.</p>
         </div>
         <Row className="g-4">
-          {buyers.map((buyer) => (
+          {featuredBuyers.map((buyer) => (
             <Col lg={4} key={buyer.id}>
               <div className="buyer-card h-100">
                 <div className="buyer-img-wrapper">
@@ -65,6 +43,11 @@ const HappyBuyers = () => {
             </Col>
           ))}
         </Row>
+        <div className="text-center mt-5">
+          <a href="/buyers" className="btn-accent text-decoration-none">
+            View All Testimonials
+          </a>
+        </div>
       </Container>
     </section>
   );
