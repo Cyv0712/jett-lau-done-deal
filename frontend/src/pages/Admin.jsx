@@ -9,10 +9,22 @@ const parsePrice = (priceStr) => {
   return parseFloat(String(priceStr).replace(/[^0-9.]/g, '')) || 0;
 };
 
+// Format numbers with commas: 1000 -> 1,000
+const formatWithCommas = (val) => {
+  if (!val) return '';
+  // Remove existing commas and non-digits
+  const cleanNum = val.toString().replace(/[^0-9]/g, '');
+  if (!cleanNum) return val;
+  return Number(cleanNum).toLocaleString();
+};
+
 const EMPTY_FORM = {
-  brand: '', model: '', type: '', year: '', mileage: '', price: '',
-  description: '', issues: '', engineSize: '', engineConfig: '',
-  power: '', transmission: '', fuelCapacity: ''
+  combinedIdentity: '', // Format: BRAND MODEL ENGINE_SIZE
+  edition: '',
+  type: '', year: '', mileage: '', price: '',
+  description: '', issues: '', engineConfig: '',
+  power: '', transmission: '', fuelCapacity: '',
+  brand: '', model: '', engineSize: '' // These will be auto-populated
 };
 
 const Admin = () => {
@@ -58,17 +70,69 @@ const Admin = () => {
     setPassword('');
   };
 
-  const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    // 1. Negative Number Validation
+    const numericFields = ['year', 'mileage', 'price', 'power', 'fuelCapacity'];
+    if (numericFields.includes(name)) {
+      const numValue = parseFloat(value.replace(/[^0-9.-]/g, ''));
+      if (numValue < 0) return; // Prevent negative numbers
+    }
+
+    // 2. Character Limit Validation (50 chars for short fields)
+    const longFields = ['description', 'issues'];
+    if (!longFields.includes(name) && value.length > 50) {
+      return; // Cap at 50 characters
+    }
+
+    setFormData({ ...formData, [name]: value });
+  };
   const handleFileChange = (e) => setImageFiles(Array.from(e.target.files));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Guard: prevent double-submission (the root cause of duplicate bike entries)
     if (isSubmitting) return;
     setIsSubmitting(true);
+
+    // ── Automatic Mapping Logic ──
+    const parts = formData.combinedIdentity.trim().split(/\s+/);
+    let brand = '';
+    let model = '';
+    let engineSize = '';
+
+    if (parts.length >= 3) {
+      brand = parts[0];
+      engineSize = parts[parts.length - 1];
+      model = parts.slice(1, -1).join(' ');
+    } else if (parts.length === 2) {
+      brand = parts[0];
+      model = parts[1];
+    } else if (parts.length === 1) {
+      brand = parts[0];
+    }
+
     const data = new FormData();
-    Object.keys(formData).forEach((key) => data.append(key, formData[key]));
+    // Append auto-mapped fields
+    data.append('brand', brand);
+    data.append('model', model);
+    const cleanEngineSize = engineSize.toUpperCase().replace('CC', '').trim();
+    data.append('engineSize', `${formatWithCommas(cleanEngineSize)} CC`);
+    
+    // Append rest of the form
+    Object.keys(formData).forEach((key) => {
+      if (!['brand', 'model', 'engineSize', 'combinedIdentity'].includes(key)) {
+        let value = formData[key];
+        // Auto-format numeric strings with commas
+        if (['price', 'mileage'].includes(key)) {
+          value = formatWithCommas(value);
+        }
+        data.append(key, value);
+      }
+    });
+    
     imageFiles.forEach((file) => data.append('images', file));
+
     try {
       const res = await fetch(apiUrl('/api/bikes'), { method: 'POST', body: data });
       if (!res.ok) throw new Error(await res.text());
@@ -313,8 +377,56 @@ const Admin = () => {
           <Modal.Body>
             <Form onSubmit={handleSubmit}>
               <div className="row g-3">
+                {/* ── Custom Identity Inputs ── */}
+                <div className="col-md-12">
+                  <Form.Group>
+                    <Form.Label className="text-secondary" style={{ fontSize: '0.85rem' }}>
+                      Motorcycle Identity <span className="text-accent ms-1">*</span>
+                    </Form.Label>
+                    <Form.Control
+                      placeholder="BRAND MODEL ENGINE_SIZE (e.g. KAWASAKI Z 1000)"
+                      name="combinedIdentity"
+                      value={formData.combinedIdentity}
+                      onChange={handleInputChange}
+                      required
+                      className="bg-dark text-white border-secondary"
+                    />
+                    <small className="text-muted" style={{ fontSize: '0.75rem' }}>Format: [BRAND] [MODEL] [ENGINE SIZE]</small>
+                  </Form.Group>
+                </div>
+                <div className="col-md-12">
+                  <Form.Group>
+                    <Form.Label className="text-secondary" style={{ fontSize: '0.85rem' }}>Edition (Optional)</Form.Label>
+                    <Form.Control
+                      placeholder="e.g. R Edition, HP Edition"
+                      name="edition"
+                      value={formData.edition}
+                      onChange={handleInputChange}
+                      className="bg-dark text-white border-secondary"
+                    />
+                  </Form.Group>
+                </div>
+
+                {/* ── Rest of the Form ── */}
                 {Object.keys(formData).map((key) => {
-                  const isRequired = ['brand', 'model', 'type', 'year', 'mileage', 'price'].includes(key);
+                  const isHidden = ['brand', 'model', 'engineSize', 'combinedIdentity', 'edition'].includes(key);
+                  if (isHidden) return null;
+
+                  const isRequired = ['type', 'year', 'mileage', 'price'].includes(key);
+                  
+                  const placeholders = {
+                    type: 'e.g. Adventure, Sport, Touring',
+                    year: 'e.g. 2023',
+                    mileage: 'e.g. 15000 (just the number)',
+                    price: 'e.g. 850000 (just the number)',
+                    description: 'Detailed overview of the bike...',
+                    issues: 'Press Shift+Enter to separate into bullets',
+                    engineConfig: 'e.g. Inline-4, Boxer, V-Twin',
+                    power: 'e.g. 136 (in HP)',
+                    transmission: 'e.g. 6-Speed Manual',
+                    fuelCapacity: 'e.g. 20 (in Liters)'
+                  };
+
                   return (
                     <div className="col-md-6" key={key}>
                       <Form.Group>
@@ -328,9 +440,16 @@ const Admin = () => {
                           value={formData[key]}
                           onChange={handleInputChange}
                           required={isRequired}
+                          placeholder={placeholders[key] || ''}
                           className="bg-dark text-white border-secondary"
                           rows={key === 'description' || key === 'issues' ? 3 : undefined}
+                          type={['year'].includes(key) ? 'number' : 'text'}
                         />
+                        {key === 'issues' && (
+                          <small className="text-muted" style={{ fontSize: '0.75rem' }}>
+                            * Press <kbd style={{backgroundColor: '#333'}}>Shift</kbd> + <kbd style={{backgroundColor: '#333'}}>Enter</kbd> to create separate bullet points.
+                          </small>
+                        )}
                       </Form.Group>
                     </div>
                   );

@@ -128,7 +128,7 @@ const BikeDetails = () => {
                 <span className="text-secondary">{bike.brand} • {bike.type}</span>
                 <Badge bg="success">Available</Badge>
               </div>
-              <h1 className="bike-title mb-4" style={{ fontSize: '2.5rem' }}>{bike.model}</h1>
+              <h1 className="bike-title mb-4" style={{ fontSize: '2.5rem' }}>{bike.model} <span className="text-accent">{bike.edition}</span></h1>
 
               <div className="d-flex gap-4 mb-4 text-white">
                 <div className="d-flex align-items-center gap-2">
