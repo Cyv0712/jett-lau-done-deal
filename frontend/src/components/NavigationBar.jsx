@@ -1,11 +1,13 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Activity } from 'lucide-react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 import { brandConfig } from '../data/brandConfig';
 
 const NavigationBar = () => {
   const { pathname, hash } = useLocation();
+
   const getSectionLinkClass = (sectionHash) =>
     `nav-link ${pathname === '/' && hash === sectionHash ? 'active' : ''}`;
 
@@ -33,6 +35,7 @@ const NavigationBar = () => {
             <NavLink to="/buyers" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>BUYERS</NavLink>
             <NavLink to="/about" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>ABOUT</NavLink>
             <NavLink to="/contact" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>CONTACT</NavLink>
+            <NavLink to="/admin" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>ADMIN</NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>

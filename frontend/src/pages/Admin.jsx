@@ -54,18 +54,31 @@ const Admin = () => {
     if (isAuthenticated) fetchBikes();
   }, [isAuthenticated]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (password === 'admin123') {
-      sessionStorage.setItem('adminAuth', 'true');
-      setIsAuthenticated(true);
-    } else {
-      alert('ACCESS DENIED: Incorrect credentials.');
+    try {
+      const res = await fetch(apiUrl('/api/auth/login'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        sessionStorage.setItem('adminAuth', 'true');
+        sessionStorage.setItem('adminToken', data.token);
+        setIsAuthenticated(true);
+      } else {
+        alert(`ACCESS DENIED: ${data.message || 'Incorrect credentials.'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Login failed. Ensure server is running.');
     }
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem('adminAuth');
+    sessionStorage.removeItem('adminToken');
     setIsAuthenticated(false);
     setPassword('');
   };
@@ -130,7 +143,14 @@ const Admin = () => {
     imageFiles.forEach((file) => data.append('images', file));
 
     try {
-      const res = await fetch(apiUrl('/api/bikes'), { method: 'POST', body: data });
+      const token = sessionStorage.getItem('adminToken');
+      const res = await fetch(apiUrl('/api/bikes'), { 
+        method: 'POST', 
+        body: data,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!res.ok) {
         const errorText = await res.text();
         throw new Error(errorText);
@@ -171,7 +191,13 @@ const Admin = () => {
   const confirmDelete = async () => {
     if (!bikeToDelete) return;
     try {
-      await fetch(apiUrl(`/api/bikes/${bikeToDelete}`), { method: 'DELETE' });
+      const token = sessionStorage.getItem('adminToken');
+      await fetch(apiUrl(`/api/bikes/${bikeToDelete}`), { 
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       setShowDeleteModal(false);
       setBikeToDelete(null);
       fetchBikes();
@@ -183,7 +209,13 @@ const Admin = () => {
   const handleMarkAsSold = async (id) => {
     if (window.confirm('Mark this bike as sold?')) {
       try {
-        await fetch(apiUrl(`/api/bikes/${id}/sold`), { method: 'PATCH' });
+        const token = sessionStorage.getItem('adminToken');
+        await fetch(apiUrl(`/api/bikes/${id}/sold`), { 
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         fetchBikes();
       } catch (err) {
         console.error(err);
@@ -205,13 +237,14 @@ const Admin = () => {
   if (!isAuthenticated) {
     return (
       <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
-        <div className="moto-card p-5" style={{ width: '400px' }}>
+        <div className="moto-card p-5" style={{ width: '400px', border: '1px solid var(--destructive)' }}>
           <div className="text-center mb-5">
-            <div className="d-inline-flex p-3 rounded-circle bg-muted mb-4 text-accent">
-              <Lock size={40} />
+            <div className="d-inline-flex p-3 rounded-circle bg-destructive-soft mb-4 text-destructive">
+              <ShieldAlert size={40} />
             </div>
-            <h3 className="moto-heading mb-2">ADMIN LOGIN</h3>
-            <p className="text-secondary" style={{ fontSize: '0.85rem' }}>AUTHORIZED PERSONNEL ONLY</p>
+            <h3 className="moto-heading mb-2">ADMIN ACCESS</h3>
+            <p className="text-destructive fw-bold" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>WARNING: AUTHORIZED PERSONNEL ONLY</p>
+            <p className="text-secondary mt-2" style={{ fontSize: '0.75rem' }}>All access attempts are logged and monitored.</p>
           </div>
           <Form onSubmit={handleLogin}>
             <Form.Group className="mb-4">
