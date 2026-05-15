@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const Bike = require('../models/Bike');
 const { persistUploadedImages, deleteBikeImages } = require('../utils/imageStorage');
+const authMiddleware = require('../middleware/auth');
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -34,7 +35,7 @@ router.get('/:id', async (req, res) => {
 const recentSubmissions = new Map();
 
 // Create a bike — accepts multiple images
-router.post('/', upload.array('images', 10), async (req, res) => {
+router.post('/', authMiddleware, upload.array('images', 10), async (req, res) => {
   try {
     const bikeData = { ...req.body };
     
@@ -65,7 +66,7 @@ router.post('/', upload.array('images', 10), async (req, res) => {
 });
 
 // Update a bike — accepts multiple images
-router.put('/:id', upload.array('images', 10), async (req, res) => {
+router.put('/:id', authMiddleware, upload.array('images', 10), async (req, res) => {
   try {
     const existing = await Bike.findById(req.params.id);
     if (!existing) return res.status(404).json({ message: 'Bike not found' });
@@ -85,7 +86,7 @@ router.put('/:id', upload.array('images', 10), async (req, res) => {
 });
 
 // Mark a bike as sold
-router.patch('/:id/sold', async (req, res) => {
+router.patch('/:id/sold', authMiddleware, async (req, res) => {
   try {
     const updatedBike = await Bike.findByIdAndUpdate(
       req.params.id,
@@ -100,7 +101,7 @@ router.patch('/:id/sold', async (req, res) => {
 });
 
 // Delete a bike — removes associated disk files and Cloudinary assets
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const bike = await Bike.findById(req.params.id);
     if (!bike) return res.status(404).json({ message: 'Bike not found' });

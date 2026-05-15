@@ -29,7 +29,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 const bikesRouter = require('./routes/bikes');
+const authRouter = require('./routes/auth');
+
 app.use('/api/bikes', bikesRouter);
+app.use('/api/auth', authRouter);
 
 // Health check — Render needs an open port quickly; don't wait for Mongo.
 app.get('/health', (req, res) => {
