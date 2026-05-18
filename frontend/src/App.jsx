@@ -10,10 +10,12 @@ import Buyers from './pages/Buyers';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import ScrollToTop from './components/ScrollToTop';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   return (
     <Router>
+      <Analytics />
       <ScrollToTop />
       <NavigationBar />
       <Routes>
