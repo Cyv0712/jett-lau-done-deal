@@ -113,7 +113,7 @@ const Inventory = () => {
   return (
     <div className="py-5" style={{ minHeight: '100vh' }}>
       <Helmet>
-        <title>Full Inventory | Katingin Bikes - Premium Big Bikes & Motorcycles</title>
+        <title>Full Inventory | Katingin Bikes</title>
         <meta name="description" content="Browse our collection of fresh, pre-owned adventure, naked, sport, and touring big bikes. Complete papers, verified quality, and honest deals." />
         <meta property="og:title" content="Full Inventory | Katingin Bikes" />
         <meta property="og:description" content="Browse our catalog of fresh, pre-owned big bikes and premium motorcycles in Metro Manila." />

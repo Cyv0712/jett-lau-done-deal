@@ -42,7 +42,7 @@ const Contact = () => {
   return (
     <div className="contact-page pb-5" style={{ backgroundColor: 'var(--bg-void)', minHeight: '100vh', paddingTop: '76px' }}>
       <Helmet>
-        <title>Contact Us | Katingin Bikes - Get in Touch</title>
+        <title>Contact Us | Katingin Bikes</title>
         <meta name="description" content="Connect with Katingin Bikes. Reach out directly via Viber, Facebook Messenger, or Email for big bike availability and financing inquiries." />
         <meta property="og:title" content="Contact Us | Katingin Bikes" />
         <meta property="og:description" content="Reach out to us directly via Viber, Facebook Messenger, or Email." />

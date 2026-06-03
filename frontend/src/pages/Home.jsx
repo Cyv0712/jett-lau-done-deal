@@ -39,7 +39,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>Katingin Bikes | Premium Pre-Owned Big Bikes & Motorcycles</title>
+        <title>Katingin Bikes</title>
         <meta name="description" content="Trusted dealer of premium, fresh, pre-owned big bikes and motorcycles in Metro Manila. Complete papers, transparent deals, and superb aftersales." />
         <meta property="og:title" content="Katingin Bikes | Premium Pre-Owned Big Bikes" />
         <meta property="og:description" content="Trusted dealer of premium, fresh, pre-owned big bikes and motorcycles in Metro Manila. Complete papers and honest deals." />
