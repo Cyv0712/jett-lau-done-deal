@@ -233,6 +233,14 @@ h6,
   outline: none;
 }
 
+.moto-input-with-icon {
+  padding-left: 38px !important;
+}
+
+.moto-input-with-icon-right {
+  padding-right: 38px !important;
+}
+
 .moto-input::placeholder {
   color: var(--text-muted) !important;
 }

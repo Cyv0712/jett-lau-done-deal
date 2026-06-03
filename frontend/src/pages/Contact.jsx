@@ -1,19 +1,59 @@
 import { Container, Row, Col } from 'react-bootstrap';
-import { Mail, Clock } from 'lucide-react';
-import { FaFacebookF, FaWhatsapp } from 'react-icons/fa';
+import { Mail } from 'lucide-react';
+import { FaFacebookF, FaViber } from 'react-icons/fa';
 import { contactInfo } from '../data/contactInfo';
 import Reveal from '../components/Reveal';
+import { Helmet } from 'react-helmet-async';
 
 const Contact = () => {
+  const isMobile = typeof window !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const cleanNumber = contactInfo.viber.replace(/^0/, '63');
+  const viberLink = isMobile
+    ? `viber://chat/?number=%2B${cleanNumber}&draft=$hello`
+    : `viber://chat/?number=+${cleanNumber}&draft=$hello`;
+  const emailLink = isMobile
+    ? `mailto:${contactInfo.email}`
+    : `https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`;
+
+  const handleViberClick = (e) => {
+    e.preventDefault();
+    // Open a new tab in about:blank state first
+    const newTab = window.open('about:blank', '_blank');
+    if (!newTab) return;
+
+    // Direct the new tab to the deep link scheme
+    newTab.location.href = viberLink;
+
+    // Timeout check: if the tab is still on about:blank after 2 seconds, Viber isn't installed.
+    // Redirect the user to the official download page instead.
+    setTimeout(() => {
+      try {
+        if (!newTab.closed) {
+          if (newTab.location.href === 'about:blank' || newTab.location.href.startsWith('viber://')) {
+            newTab.location.href = 'https://www.viber.com/en/download/';
+          }
+        }
+      } catch (err) {
+        // Safe to ignore: a cross-origin error means it successfully navigated or launched
+      }
+    }, 2000);
+  };
+
   return (
-    <div className="contact-page pb-5">
+    <div className="contact-page pb-5" style={{ backgroundColor: 'var(--bg-void)', minHeight: '100vh', paddingTop: '76px' }}>
+      <Helmet>
+        <title>Contact Us | Katingin Bikes - Get in Touch</title>
+        <meta name="description" content="Connect with Katingin Bikes. Reach out directly via Viber, Facebook Messenger, or Email for big bike availability and financing inquiries." />
+        <meta property="og:title" content="Contact Us | Katingin Bikes" />
+        <meta property="og:description" content="Reach out to us directly via Viber, Facebook Messenger, or Email." />
+        <meta property="og:image" content="https://katinginbikes.com/static_data/Katingin_logo.webp" />
+        <meta property="og:url" content="https://katinginbikes.com/contact" />
+      </Helmet>
       {/* ── 1. Hero Section ── */}
-      <section 
+      <section
         className="contact-hero position-relative d-flex align-items-center justify-content-center text-center"
         style={{
-          minHeight: '35vh',
-          marginTop: '76px',
-          backgroundColor: 'var(--bg-void)'
+          minHeight: '25vh'
         }}
       >
         <Container>
@@ -40,17 +80,18 @@ const Contact = () => {
           <Row className="g-4 justify-content-center mb-5">
             <Col md={4}>
               <Reveal delay={1} className="h-100">
-                <a 
-                  href={`https://wa.me/${contactInfo.phone.replace(/[^0-9]/g, '')}`} 
-                  target="_blank" 
+                <a
+                  href={viberLink}
+                  onClick={handleViberClick}
+                  target="_blank"
                   rel="noreferrer"
                   className="moto-card p-4 text-center text-decoration-none d-block h-100"
                 >
-                  <div className="mb-4 d-inline-flex align-items-center justify-content-center bg-muted rounded-circle" style={{ color: '#25D366', width: '60px', height: '60px' }}>
-                    <FaWhatsapp size={32} />
+                  <div className="mb-4 d-inline-flex align-items-center justify-content-center bg-muted rounded-circle" style={{ color: '#7360F2', width: '60px', height: '60px' }}>
+                    <FaViber size={32} />
                   </div>
-                  <h4 className="moto-heading mb-2" style={{ fontSize: '1.2rem' }}>WHATSAPP / VIBER</h4>
-                  <p className="text-secondary mb-4">{contactInfo.phone}</p>
+                  <h4 className="moto-heading mb-2" style={{ fontSize: '1.2rem' }}>VIBER</h4>
+                  <p className="text-secondary mb-4">{contactInfo.viber}</p>
                   <div className="text-accent small fw-bold mt-auto">SEND A MESSAGE</div>
                 </a>
               </Reveal>
@@ -58,9 +99,9 @@ const Contact = () => {
 
             <Col md={4}>
               <Reveal delay={2} className="h-100">
-                <a 
-                  href={contactInfo.facebook} 
-                  target="_blank" 
+                <a
+                  href={contactInfo.facebook}
+                  target="_blank"
                   rel="noreferrer"
                   className="moto-card p-4 text-center text-decoration-none d-block h-100"
                 >
@@ -68,7 +109,7 @@ const Contact = () => {
                     <FaFacebookF size={30} />
                   </div>
                   <h4 className="moto-heading mb-2" style={{ fontSize: '1.2rem' }}>MESSENGER</h4>
-                  <p className="text-secondary mb-4">Official Page</p>
+                  <p className="text-secondary mb-4">Katingin Bikes</p>
                   <div className="text-accent small fw-bold mt-auto">CHAT WITH US</div>
                 </a>
               </Reveal>
@@ -76,28 +117,20 @@ const Contact = () => {
 
             <Col md={4}>
               <Reveal delay={3} className="h-100">
-                <div className="moto-card p-4 text-center h-100">
+                <a 
+                  href={emailLink} 
+                  target={isMobile ? undefined : "_blank"}
+                  rel={isMobile ? undefined : "noreferrer"}
+                  className="moto-card p-4 text-center text-decoration-none d-block h-100"
+                >
                   <div className="mb-4 d-inline-flex align-items-center justify-content-center bg-muted rounded-circle" style={{ color: 'var(--accent-primary)', width: '60px', height: '60px' }}>
                     <Mail size={30} />
                   </div>
                   <h4 className="moto-heading mb-2" style={{ fontSize: '1.2rem' }}>EMAIL US</h4>
                   <p className="text-secondary mb-4">{contactInfo.email}</p>
                   <div className="text-accent small fw-bold mt-auto" style={{ fontSize: '0.7rem' }}>FOR FINANCING REQUIREMENTS ONLY</div>
-                </div>
+                </a>
               </Reveal>
-            </Col>
-          </Row>
-
-          <Row className="justify-content-center">
-            <Col lg={6}>
-              <div className="moto-card p-5 text-center">
-                <div className="d-flex align-items-center justify-content-center flex-shrink-0 bg-void rounded-circle mx-auto mb-4" style={{ color: 'var(--accent-primary)', width: '70px', height: '70px' }}>
-                  <Clock size={28} />
-                </div>
-                <h5 className="moto-heading mb-2" style={{ fontSize: '1.3rem' }}>OPERATING HOURS</h5>
-                <p className="text-secondary mb-0" style={{ fontSize: '1.05rem' }}>{contactInfo.operatingHours}</p>
-                <div className="mt-3 text-accent" style={{ fontSize: '0.85rem', fontWeight: 600, letterSpacing: '2px' }}>UNIT VIEWING BY APPOINTMENT ONLY</div>
-              </div>
             </Col>
           </Row>
         </Container>

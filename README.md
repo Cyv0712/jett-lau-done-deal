@@ -1,6 +1,5 @@
 # Katingin Bikes 🏍️
 
-**Ang Toy Kingdom ng mga Tito.**  
 A premium, high-performance web application designed for a high-end pre-owned motorcycle dealership in Metro Manila. Built with a modern full-stack architecture, Katingin Bikes features an immersive "dark showroom" aesthetic, a robust custom inventory management system, and automated cloud-based media delivery.
 
 ## 🌟 Key Features

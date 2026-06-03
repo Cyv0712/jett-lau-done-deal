@@ -8,9 +8,8 @@ import { brandConfig } from '../data/brandConfig';
  * Sequence:
  *  1. Logo fades in on a dark screen
  *  2. "KATINGIN BIKES" text slides up
- *  3. Tagline fades in
- *  4. Hero image expands from a tiny point outward to fill the viewport
- *  5. Everything dissolves into the live site
+ *  3. Hero image expands from a tiny point outward to fill the viewport
+ *  4. Everything dissolves into the live site
  */
 const SplashScreen = ({ onComplete }) => {
   const containerRef = useRef(null);
@@ -19,7 +18,6 @@ const SplashScreen = ({ onComplete }) => {
   const logoRef = useRef(null);
   const titleMainRef = useRef(null);
   const titleAccentRef = useRef(null);
-  const taglineRef = useRef(null);
   const contentRef = useRef(null);
   const [removed, setRemoved] = useState(false);
 
@@ -60,13 +58,6 @@ const SplashScreen = ({ onComplete }) => {
           { y: '120%', opacity: 0 },
           { y: '0%', opacity: 1, duration: 0.8, ease: 'power4.out' },
           '-=0.5'
-        );
-
-        // ── Phase 4: Tagline fades in ──
-        tl.fromTo(taglineRef.current,
-          { opacity: 0, y: 12 },
-          { opacity: 0.7, y: 0, duration: 0.8, ease: 'power3.out' },
-          '-=0.3'
         );
 
         // ── Phase 5: Hold on logo/text ──
@@ -150,7 +141,7 @@ const SplashScreen = ({ onComplete }) => {
           <span ref={titleMainRef} className="splash-title-main">KATINGIN</span>
           <span ref={titleAccentRef} className="splash-title-accent">BIKES</span>
         </div>
-        <div ref={taglineRef} className="splash-tagline">ANG TOY KINGDOM NG MGA TITO</div>
+
       </div>
     </div>
   );

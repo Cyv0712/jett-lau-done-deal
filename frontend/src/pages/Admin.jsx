@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Container, Table, Form, Modal, Row, Col } from 'react-bootstrap';
-import { Trash, Plus, Bike, Banknote, TrendingUp, LogOut, Check, Database, Lock, ShieldAlert } from 'lucide-react';
+import { Trash, Plus, Bike, Banknote, TrendingUp, LogOut, Check, Database, Lock, ShieldAlert, Eye, EyeOff } from 'lucide-react';
 import { apiUrl } from '../config/api';
 
 // Parse price strings like "₱450,000" → 450000
@@ -32,6 +32,7 @@ const Admin = () => {
     () => sessionStorage.getItem('adminAuth') === 'true'
   );
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [bikes, setBikes] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState(EMPTY_FORM);
@@ -268,7 +269,7 @@ const Admin = () => {
   if (!isAuthenticated) {
     return (
       <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
-        <div className="moto-card p-5" style={{ width: '400px', border: '1px solid var(--destructive)' }}>
+        <div className="moto-card p-4 p-sm-5" style={{ width: '100%', maxWidth: '400px', border: '1px solid var(--destructive)' }}>
           <div className="text-center mb-5">
             <div className="d-inline-flex p-3 rounded-circle bg-destructive-soft mb-4 text-destructive">
               <ShieldAlert size={40} />
@@ -282,13 +283,31 @@ const Admin = () => {
               <div className="position-relative">
                 <Lock size={16} className="text-muted position-absolute" style={{ left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
                 <Form.Control
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Password"
-                  className="moto-input"
+                  className="moto-input moto-input-with-icon moto-input-with-icon-right"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  style={{ paddingLeft: '36px' }}
                 />
+                <button
+                  type="button"
+                  className="position-absolute text-muted p-0"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  title={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
               </div>
             </Form.Group>
             <button type="submit" className="moto-btn w-100 py-3">
@@ -305,12 +324,12 @@ const Admin = () => {
     <div style={{ paddingTop: '100px', paddingBottom: '100px', minHeight: '100vh', backgroundColor: 'var(--bg-void)' }}>
       <Container>
         {/* Header */}
-        <div className="d-flex justify-content-between align-items-center mb-5">
+        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-5">
           <div>
             <span className="text-accent" style={{ fontSize: '0.85rem', fontWeight: 600, letterSpacing: '2px' }}>STATUS: ONLINE</span>
             <h2 className="moto-heading mt-1 mb-0" style={{ fontSize: '2.5rem' }}>DASHBOARD</h2>
           </div>
-          <div className="d-flex gap-3">
+          <div className="d-flex flex-wrap gap-2 gap-sm-3">
             <button
               onClick={handleLogout}
               className="moto-btn moto-btn-outline"
@@ -360,12 +379,12 @@ const Admin = () => {
         </Row>
 
         {/* View Selector */}
-        <div className="d-flex justify-content-between align-items-end mb-4 mt-5">
+        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-3 mb-4 mt-5">
           <h4 className="moto-heading mb-0" style={{ fontSize: '1.4rem' }}>
              <Database size={20} className="text-accent me-2" /> 
              {view === 'Available' ? 'ACTIVE INVENTORY' : 'SOLD UNITS'}
           </h4>
-          <Form.Group style={{ width: '250px' }}>
+          <Form.Group style={{ width: '100%', maxWidth: '250px' }}>
              <small className="text-secondary fw-bold d-block mb-1" style={{ fontSize: '0.75rem', letterSpacing: '1px' }}>VIEW STATUS</small>
              <Form.Select 
               value={view} 

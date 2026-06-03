@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import SkeletonCard from '../components/SkeletonCard';
 import { apiUrl, toAbsoluteUploadUrl } from '../config/api';
 import Reveal from '../components/Reveal';
+import { Helmet } from 'react-helmet-async';
 
 // --- Helper ---
 const parsePrice = (priceStr) => {
@@ -111,6 +112,14 @@ const Inventory = () => {
 
   return (
     <div className="py-5" style={{ minHeight: '100vh' }}>
+      <Helmet>
+        <title>Full Inventory | Katingin Bikes - Premium Big Bikes & Motorcycles</title>
+        <meta name="description" content="Browse our collection of fresh, pre-owned adventure, naked, sport, and touring big bikes. Complete papers, verified quality, and honest deals." />
+        <meta property="og:title" content="Full Inventory | Katingin Bikes" />
+        <meta property="og:description" content="Browse our catalog of fresh, pre-owned big bikes and premium motorcycles in Metro Manila." />
+        <meta property="og:image" content="https://katinginbikes.com/static_data/Katingin_logo.webp" />
+        <meta property="og:url" content="https://katinginbikes.com/inventory" />
+      </Helmet>
       <Container style={{ paddingTop: '80px' }}>
         {/* Page Header */}
         <Reveal>
@@ -148,11 +157,10 @@ const Inventory = () => {
                     <Search size={14} className="text-muted position-absolute" style={{ left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
                     <input
                       type="text"
-                      className="form-control moto-input w-100"
+                      className="form-control moto-input moto-input-with-icon w-100"
                       placeholder="Brand, model..."
                       value={filters.search}
                       onChange={(e) => setFilter('search', e.target.value)}
-                      style={{ paddingLeft: '32px' }}
                     />
                     {filters.search && (
                       <X size={14} className="text-secondary position-absolute" style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }} onClick={() => setFilter('search', '')} />

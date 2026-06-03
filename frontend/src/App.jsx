@@ -14,13 +14,16 @@ const Inventory = lazy(() => import('./pages/Inventory'));
 const BikeDetails = lazy(() => import('./pages/BikeDetails'));
 const ShowcaseDetails = lazy(() => import('./pages/ShowcaseDetails'));
 const About = lazy(() => import('./pages/About'));
-const Buyers = lazy(() => import('./pages/Buyers'));
+// const Buyers = lazy(() => import('./pages/Buyers'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Admin = lazy(() => import('./pages/Admin'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    // Skip splash screen if the user has already loaded/seen it in this session
+    return !sessionStorage.getItem('hasSeenSplash');
+  });
 
   // Lock body scroll during splash
   useEffect(() => {
@@ -33,6 +36,7 @@ function App() {
   }, [showSplash]);
 
   const handleSplashComplete = useCallback(() => {
+    sessionStorage.setItem('hasSeenSplash', 'true');
     setShowSplash(false);
   }, []);
 
@@ -59,7 +63,7 @@ function App() {
             <Route path="/bike/:id" element={<AnimatedPage><BikeDetails /></AnimatedPage>} />
             <Route path="/showcase/:slug" element={<AnimatedPage><ShowcaseDetails /></AnimatedPage>} />
             <Route path="/about" element={<AnimatedPage><About /></AnimatedPage>} />
-            <Route path="/buyers" element={<AnimatedPage><Buyers /></AnimatedPage>} />
+            {/* <Route path="/buyers" element={<AnimatedPage><Buyers /></AnimatedPage>} /> */}
             <Route path="/contact" element={<AnimatedPage><Contact /></AnimatedPage>} />
             <Route path="/admin" element={<AnimatedPage><Admin /></AnimatedPage>} />
             {/* Wildcard 404 Route */}

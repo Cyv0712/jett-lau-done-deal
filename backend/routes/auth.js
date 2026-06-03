@@ -1,16 +1,36 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const { authLimiter } = require('../middleware/rateLimiter');
 
 router.post('/login', authLimiter, (req, res) => {
   const { password } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'; // Fallback for dev
+  const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+  const adminPasswordPlain = process.env.ADMIN_PASSWORD;
 
-  if (password === adminPassword) {
+  if (!adminPasswordHash && !adminPasswordPlain) {
+    console.error('ERROR: Admin credentials are not configured on the server (ADMIN_PASSWORD_HASH or ADMIN_PASSWORD).');
+    return res.status(500).json({ message: 'Admin credentials not configured' });
+  }
+
+  let isValid = false;
+
+  if (adminPasswordHash) {
+    isValid = bcrypt.compareSync(password, adminPasswordHash);
+  } else if (adminPasswordPlain) {
+    if (adminPasswordPlain === 'admin123') {
+      console.warn('WARNING: Admin is using the weak default password "admin123". Please change it immediately.');
+    } else {
+      console.warn('WARNING: ADMIN_PASSWORD is stored in plain text. Please migrate to ADMIN_PASSWORD_HASH.');
+    }
+    isValid = (password === adminPasswordPlain);
+  }
+
+  if (isValid) {
     const token = jwt.sign(
       { role: 'admin' },
-      process.env.JWT_SECRET || 'fallback_secret_do_not_use_in_prod',
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
     res.json({ token });

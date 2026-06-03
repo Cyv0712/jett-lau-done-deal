@@ -1,20 +1,58 @@
 import HeroSection from '../components/HeroSection';
 import BrandMarquee from '../components/BrandMarquee';
 import FeaturedBikes from '../components/FeaturedBikes';
-import HappyBuyers from '../components/HappyBuyers';
 import AboutUs from '../components/AboutUs';
+import { Helmet } from 'react-helmet-async';
 
 import { useReveal } from '../hooks/useReveal';
 
 const Home = () => {
   useReveal();
   
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "MotorcycleDealer",
+    "name": "Katingin Bikes",
+    "image": "https://katinginbikes.com/static_data/Katingin_logo.webp",
+    "url": "https://katinginbikes.com",
+    "telephone": "09435509357",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Metro Manila",
+      "addressCountry": "PH"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  };
+
   return (
     <>
+      <Helmet>
+        <title>Katingin Bikes | Premium Pre-Owned Big Bikes & Motorcycles</title>
+        <meta name="description" content="Trusted dealer of premium, fresh, pre-owned big bikes and motorcycles in Metro Manila. Complete papers, transparent deals, and superb aftersales." />
+        <meta property="og:title" content="Katingin Bikes | Premium Pre-Owned Big Bikes" />
+        <meta property="og:description" content="Trusted dealer of premium, fresh, pre-owned big bikes and motorcycles in Metro Manila. Complete papers and honest deals." />
+        <meta property="og:image" content="https://katinginbikes.com/static_data/Katingin_logo.webp" />
+        <meta property="og:url" content="https://katinginbikes.com/" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
+      </Helmet>
       <HeroSection />
       <BrandMarquee />
       <FeaturedBikes />
-      <HappyBuyers />
       <AboutUs />
     </>
   );

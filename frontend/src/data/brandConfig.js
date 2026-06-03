@@ -2,7 +2,7 @@ export const brandConfig = {
   name: 'KATINGIN BIKES',
   brandSuffix: '',
   fullName: 'Katingin Bikes',
-  description: "Ang Toy Kingdom ng mga Tito. Offering the fresh second hand bigbikes, hassle-free paperwork, superb aftersales, and honest deals in Metro Manila.",
+  description: "Offering the fresh second hand bigbikes, hassle-free paperwork, superb aftersales, and honest deals in Metro Manila.",
 
   // Hero & About Narratives
   aboutHeroTitle: 'KATINGIN BIKES',
@@ -11,7 +11,7 @@ export const brandConfig = {
   storyTitle: 'OUR ROOTS',
   storyParagraphs: [
     "Katingin Bikes started with KenjiMoto's passion for motorcycles and a commitment to helping fellow riders find their dream rides. We understand that a big bike is more than just a machine—it's a lifestyle.",
-    "Known as 'Ang Toy Kingdom Ng Mga Tito', we've built a solid community based on trust. Our garage sales and bike swaps are designed to be straightforward, transparent, and always 'fresh'—no scams, no hidden issues."
+    "We've built a solid community based on trust. Our garage sales and bike swaps are designed to be straightforward, transparent, and always 'fresh'—no scams, no hidden issues."
   ],
   quote: "Hindi lang basta benta, pangarap ang hatid natin sa bawat rider.",
 

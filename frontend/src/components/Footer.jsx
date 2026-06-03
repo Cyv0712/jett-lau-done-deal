@@ -40,7 +40,7 @@ const Footer = () => {
             <ul className="list-unstyled d-flex flex-column gap-3">
               <li><Link to="/" className="text-secondary text-decoration-none hover-accent">Home</Link></li>
               <li><Link to="/inventory" className="text-secondary text-decoration-none hover-accent">Inventory</Link></li>
-              <li><Link to="/buyers" className="text-secondary text-decoration-none hover-accent">Happy Buyers</Link></li>
+              {/* <li><Link to="/buyers" className="text-secondary text-decoration-none hover-accent">Happy Buyers</Link></li> */}
               <li><Link to="/contact" className="text-secondary text-decoration-none hover-accent">Contact Us</Link></li>
             </ul>
           </Col>
@@ -64,6 +64,9 @@ const Footer = () => {
         <div className="text-center pt-5 mt-4" style={{ borderTop: '1px solid var(--border-color)', opacity: 0.8 }}>
           <p className="text-secondary mb-0" style={{ fontSize: '0.85rem', letterSpacing: '0.5px' }}>
             &copy; {new Date().getFullYear()} {brandConfig.fullName}. All rights reserved.
+          </p>
+          <p className="text-secondary mt-3 mb-0 mx-auto" style={{ fontSize: '0.75rem', letterSpacing: '0.5px', opacity: 0.7, maxWidth: '600px', lineHeight: '1.5' }}>
+            Disclaimer: All motorcycle brand names, logos, and trademarks displayed on this website are the property of their respective owners. {brandConfig.fullName} is an independent platform and does not claim ownership or affiliation with these brands.
           </p>
         </div>
       </Container>

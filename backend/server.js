@@ -1,13 +1,26 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const compression = require('compression');
 const path = require('path');
 const fs = require('fs');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
+if (!process.env.JWT_SECRET) {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('FATAL ERROR: JWT_SECRET environment variable is required in production.');
+    process.exit(1);
+  } else {
+    const crypto = require('crypto');
+    process.env.JWT_SECRET = crypto.randomBytes(32).toString('hex');
+    console.warn('WARNING: JWT_SECRET was not set in .env. Generated a temporary random key for development.');
+  }
+}
+
 const app = express();
+app.use(compression());
 const PORT = process.env.PORT || 5000;
 const CORS_ORIGIN = process.env.CORS_ORIGIN;
 const allowedOrigins = CORS_ORIGIN ? CORS_ORIGIN.split(',').map(o => o.trim()) : '*';
