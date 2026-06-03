@@ -5,5 +5,5 @@ Allow: /
 # Disallow admin dashboard crawling
 Disallow: /admin
 
-# Sitemap link
-Sitemap: /sitemap.xml
+Sitemap: https://www.katinginbikes.com/sitemap.xml
+
