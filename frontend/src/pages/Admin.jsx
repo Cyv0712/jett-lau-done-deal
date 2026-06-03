@@ -39,6 +39,21 @@ const Admin = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const [view, setView] = useState('Available');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successModal, setSuccessModal] = useState({ show: false, message: '' });
+  const [showSoldModal, setShowSoldModal] = useState(false);
+  const [bikeToMarkSold, setBikeToMarkSold] = useState(null);
+
+  const showSuccess = (message) => {
+    setSuccessModal({ show: true, message });
+    setTimeout(() => {
+      setSuccessModal(prev => {
+        if (prev.message === message) {
+          return { show: false, message: '' };
+        }
+        return prev;
+      });
+    }, 2500);
+  };
 
   const fetchBikes = async () => {
     try {
@@ -228,30 +243,40 @@ const Admin = () => {
       }
       setShowDeleteModal(false);
       setBikeToDelete(null);
-      fetchBikes();
+      await fetchBikes();
+      showSuccess('Unit was successfully deleted from inventory.');
     } catch (err) {
       console.error(err);
+      alert('Failed to delete the unit. Please try again.');
     }
   };
 
-  const handleMarkAsSold = async (id) => {
-    if (window.confirm('Mark this bike as sold?')) {
-      try {
-        const token = sessionStorage.getItem('adminToken');
-        const res = await fetch(apiUrl(`/api/bikes/${id}/sold`), { 
-          method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (res.status === 401) {
-          handleUnauthorized();
-          return;
+  const handleMarkAsSold = (id) => {
+    setBikeToMarkSold(id);
+    setShowSoldModal(true);
+  };
+
+  const confirmMarkAsSold = async () => {
+    if (!bikeToMarkSold) return;
+    try {
+      const token = sessionStorage.getItem('adminToken');
+      const res = await fetch(apiUrl(`/api/bikes/${bikeToMarkSold}/sold`), { 
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
-        fetchBikes();
-      } catch (err) {
-        console.error(err);
+      });
+      if (res.status === 401) {
+        handleUnauthorized();
+        return;
       }
+      setShowSoldModal(false);
+      setBikeToMarkSold(null);
+      await fetchBikes();
+      showSuccess('Unit was successfully marked as sold (images and specifications cleared).');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to mark the unit as sold. Please try again.');
     }
   };
 
@@ -614,7 +639,7 @@ const Admin = () => {
             Are you sure you want to remove this bike from your inventory? <br />
             <strong>This action cannot be undone.</strong>
           </p>
-          <div className="d-flex gap-3">
+          <div className="d-flex flex-column flex-sm-row gap-3">
             <button 
               className="moto-btn moto-btn-outline w-100 py-3" 
               onClick={() => setShowDeleteModal(false)}
@@ -628,6 +653,54 @@ const Admin = () => {
               DELETE
             </button>
           </div>
+        </Modal.Body>
+      </Modal>
+
+      {/* Mark as Sold Confirmation Modal */}
+      <Modal show={showSoldModal} onHide={() => setShowSoldModal(false)} centered>
+        <Modal.Body className="p-5 bg-dark text-white text-center">
+          <div className="d-inline-flex p-3 rounded-circle bg-destructive-soft mb-4 text-accent" style={{ backgroundColor: 'rgba(212, 175, 55, 0.05)' }}>
+            <Check size={40} />
+          </div>
+          <h3 className="moto-heading mb-3">MARK AS SOLD?</h3>
+          <p className="text-secondary mb-5" style={{ fontSize: '0.9rem' }}>
+            Are you sure you want to mark this bike as sold? <br />
+            <strong>This will delete its images and specifications.</strong>
+          </p>
+          <div className="d-flex flex-column flex-sm-row gap-3">
+            <button 
+              className="moto-btn moto-btn-outline w-100 py-3" 
+              onClick={() => setShowSoldModal(false)}
+            >
+              CANCEL
+            </button>
+            <button 
+              className="moto-btn w-100 py-3" 
+              onClick={confirmMarkAsSold}
+            >
+              CONFIRM
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      {/* Success Notification Modal */}
+      <Modal show={successModal.show} onHide={() => setSuccessModal({ show: false, message: '' })} centered size="sm">
+        <Modal.Body className="p-4 bg-dark text-white text-center" style={{ border: '1px solid var(--accent-primary)', borderRadius: '8px' }}>
+          <div className="d-inline-flex p-3 rounded-circle bg-destructive-soft mb-3 text-accent" style={{ backgroundColor: 'rgba(212, 175, 55, 0.05)' }}>
+            <Check size={32} />
+          </div>
+          <h5 className="moto-heading mb-2 text-primary" style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>SUCCESS</h5>
+          <p className="text-secondary mb-4" style={{ fontSize: '0.85rem', lineHeight: '1.5' }}>
+            {successModal.message}
+          </p>
+          <button 
+            className="moto-btn w-100 py-2" 
+            onClick={() => setSuccessModal({ show: false, message: '' })}
+            style={{ fontSize: '0.85rem' }}
+          >
+            OK
+          </button>
         </Modal.Body>
       </Modal>
     </div>
