@@ -447,8 +447,8 @@ const Admin = () => {
                     <tr key={bike._id} style={{ borderBottom: '1px solid var(--border-color)' }}>
                       <td className="py-3 ps-4">{bike.brand}</td>
                       <td className="py-3">{bike.model}</td>
-                      <td className="py-3">{bike.type.toUpperCase()}</td>
-                      <td className="py-3">{bike.year}</td>
+                      <td className="py-3">{bike.type ? bike.type.toUpperCase() : '—'}</td>
+                      <td className="py-3">{bike.year || '—'}</td>
                       <td className="py-3 text-muted fw-bold">{bike.price}</td>
                       <td className="py-3 pe-4">
                         <div className="d-flex justify-content-center">

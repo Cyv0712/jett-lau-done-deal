@@ -85,15 +85,38 @@ router.put('/:id', authMiddleware, upload.array('images', 10), async (req, res) 
   }
 });
 
-// Mark a bike as sold
+// Mark a bike as sold — clears spec details and deletes associated images from disk / Cloudinary
 router.patch('/:id/sold', authMiddleware, async (req, res) => {
   try {
+    const bike = await Bike.findById(req.params.id);
+    if (!bike) return res.status(404).json({ message: 'Bike not found' });
+
+    // Delete associated images from disk / Cloudinary to keep it lightweight
+    if (bike.images && bike.images.length > 0) {
+      await deleteBikeImages(bike.images);
+    }
+
     const updatedBike = await Bike.findByIdAndUpdate(
       req.params.id,
-      { status: 'Sold' },
+      {
+        $set: { status: 'Sold' },
+        $unset: {
+          edition: 1,
+          type: 1,
+          year: 1,
+          mileage: 1,
+          description: 1,
+          issues: 1,
+          engineSize: 1,
+          engineConfig: 1,
+          power: 1,
+          transmission: 1,
+          fuelCapacity: 1,
+          images: 1
+        }
+      },
       { new: true }
     );
-    if (!updatedBike) return res.status(404).json({ message: 'Bike not found' });
     res.json(updatedBike);
   } catch (err) {
     res.status(400).json({ message: err.message });

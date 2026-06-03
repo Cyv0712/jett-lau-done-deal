@@ -71,10 +71,11 @@ const BikeDetails = () => {
     );
   }
 
-  if (!bike) {
+  if (!bike || bike.status === 'Sold') {
     return (
       <div style={{ paddingTop: '150px', minHeight: '100vh', textAlign: 'center' }}>
-        <h2 className="moto-heading text-destructive">UNIT NOT FOUND</h2>
+        <h2 className="moto-heading text-destructive">UNIT SOLD OUT</h2>
+        <p className="text-secondary mt-3">This motorcycle is no longer in our inventory.</p>
         <Link to="/inventory" className="moto-btn mt-4">BACK TO INVENTORY</Link>
       </div>
     );
