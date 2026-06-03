@@ -16,7 +16,7 @@ const Footer = () => {
             <h3 className="moto-heading mb-4" style={{ fontSize: '1.6rem', fontWeight: 800 }}>
               {brandConfig.name} <span className="text-accent">{brandConfig.brandSuffix}</span>
             </h3>
-            <p className="text-secondary mb-4" style={{ fontSize: '0.95rem', lineHeight: '1.8', maxWidth: '350px' }}>
+            <p className="text-secondary mb-4 mx-lg-0 mx-auto" style={{ fontSize: '0.95rem', lineHeight: '1.8', maxWidth: '350px' }}>
               {brandConfig.description}
             </p>
             <div className="d-flex gap-3 mt-4">
