@@ -1,9 +1,7 @@
-# robots.txt for Katingin Bikes
+# robots.txt for Jett Lau Done Deal
 User-agent: *
+Disallow: /admin
+Disallow: /api/
 Allow: /
 
-# Disallow admin dashboard crawling
-Disallow: /admin
-
-Sitemap: https://www.katinginbikes.com/sitemap.xml
-
+Sitemap: https://jettlaudonedeal.com/sitemap.xml

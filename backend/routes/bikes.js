@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 const Bike = require('../models/Bike');
-const { persistUploadedImages, deleteBikeImages } = require('../utils/imageStorage');
+const { persistUploadedImages, deleteBikeImages, optimizeImageBuffer } = require('../utils/imageStorage');
+const { downloadImage } = require('../utils/download');
 const authMiddleware = require('../middleware/auth');
 
 const upload = multer({
@@ -17,6 +21,39 @@ router.get('/', async (req, res) => {
     res.json(bikes);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// Image Proxy endpoint — caches and optimizes Cloudinary images locally
+router.get('/image-proxy', async (req, res) => {
+  const imageUrl = req.query.url;
+  if (!imageUrl) {
+    return res.status(400).json({ message: 'URL query parameter is required' });
+  }
+
+  try {
+    const md5Hash = crypto.createHash('md5').update(imageUrl).digest('hex');
+    const cacheDir = path.join(__dirname, '..', 'cache');
+    if (!fs.existsSync(cacheDir)) {
+      fs.mkdirSync(cacheDir, { recursive: true });
+    }
+    const cachedFilePath = path.join(cacheDir, `${md5Hash}.webp`);
+
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+
+    if (fs.existsSync(cachedFilePath)) {
+      return res.sendFile(cachedFilePath);
+    }
+
+    const buffer = await downloadImage(imageUrl);
+    const optimizedBuffer = await optimizeImageBuffer(buffer);
+    fs.writeFileSync(cachedFilePath, optimizedBuffer);
+
+    res.setHeader('Content-Type', 'image/webp');
+    return res.send(optimizedBuffer);
+  } catch (err) {
+    console.error('Image proxy failed, redirecting to fallback:', err.message);
+    return res.redirect(imageUrl);
   }
 });
 
@@ -76,6 +113,8 @@ router.put('/:id', authMiddleware, upload.array('images', 10), async (req, res) 
     if (req.files?.length) {
       await deleteBikeImages(existing.images);
       bikeData.images = await persistUploadedImages(req.files);
+    } else if (req.body.existingImages) {
+      bikeData.images = Array.isArray(req.body.existingImages) ? req.body.existingImages : [req.body.existingImages];
     }
 
     const updatedBike = await Bike.findByIdAndUpdate(req.params.id, bikeData, { new: true });

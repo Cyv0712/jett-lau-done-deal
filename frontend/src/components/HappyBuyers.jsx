@@ -8,7 +8,7 @@ const buyers = [
     name: "Mark T.",
     bike: "BMW R 1250 GS",
     image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=150&auto=format&fit=crop",
-    quote: "Katingin Bikes lived up to their name. The transaction was smooth, and the bike was exactly as described. Best dealership experience."
+    quote: "Jett Lau Done Deal lived up to its name. The transaction was smooth, and the bike was exactly as described. Best dealership experience."
   },
   {
     id: 2,

@@ -12,9 +12,9 @@ const Home = () => {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "MotorcycleDealer",
-    "name": "Katingin Bikes",
-    "image": "https://katinginbikes.com/static_data/Katingin_logo.png",
-    "url": "https://katinginbikes.com",
+    "name": "Jett Lau Done Deal",
+    "image": "https://jettlaudonedeal.com/static_data/jett_lau_favicon-removebg-preview.webp",
+    "url": "https://jettlaudonedeal.com",
     "telephone": "09435509357",
     "address": {
       "@type": "PostalAddress",
@@ -39,12 +39,12 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>Katingin Bikes</title>
-        <meta name="description" content="Trusted dealer of premium, fresh, pre-owned big bikes and motorcycles in Metro Manila. Complete papers, transparent deals, and superb aftersales." />
-        <meta property="og:title" content="Katingin Bikes | Premium Pre-Owned Big Bikes" />
-        <meta property="og:description" content="Trusted dealer of premium, fresh, pre-owned big bikes and motorcycles in Metro Manila. Complete papers and honest deals." />
-        <meta property="og:image" content="https://katinginbikes.com/static_data/Katingin_logo.png" />
-        <meta property="og:url" content="https://katinginbikes.com/" />
+        <title>Jett Lau Done Deal | Premium Pre-Owned Big Bikes</title>
+        <meta name="description" content="Your premier destination for high-quality, second-hand adventure bigbikes in the Philippines. From the Screen to the Showroom." />
+        <meta property="og:title" content="Jett Lau Done Deal | Premium Pre-Owned Big Bikes" />
+        <meta property="og:description" content="Your premier destination for high-quality, second-hand adventure bigbikes in the Philippines. From the Screen to the Showroom." />
+        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/jett_lau_favicon-removebg-preview.webp" />
+        <meta property="og:url" content="https://jettlaudonedeal.com/" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}

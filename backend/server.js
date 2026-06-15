@@ -1,3 +1,6 @@
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -47,13 +50,15 @@ app.use('/api', globalLimiter);
 // Routes
 const bikesRouter = require('./routes/bikes');
 const authRouter = require('./routes/auth');
+const inquiriesRouter = require('./routes/inquiries');
 
 app.use('/api/bikes', bikesRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/inquiries', inquiriesRouter);
 
 // Root Route
 app.get('/', (req, res) => {
-  res.status(200).send('Katingin Bikes Backend API is running successfully!');
+  res.status(200).send('Jett Lau Done Deal Backend API is running successfully!');
 });
 
 // Health check — Render needs an open port quickly; don't wait for Mongo.
@@ -65,13 +70,17 @@ app.get('/health', (req, res) => {
   });
 });
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/katinginbikes';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/jettlaudonedeal';
 
 const host = process.env.HOST || '0.0.0.0';
 app.listen(PORT, host, () => {
   console.log(`Server listening on http://${host}:${PORT}`);
   mongoose
     .connect(MONGO_URI)
-    .then(() => console.log('Connected to MongoDB'))
+    .then(() => {
+      console.log('Connected to MongoDB');
+      const { warmImageCache } = require('./utils/cacheWarmer');
+      warmImageCache().catch(err => console.error('[Startup] Cache warmer error:', err));
+    })
     .catch((err) => console.error('Failed to connect to MongoDB', err));
 });

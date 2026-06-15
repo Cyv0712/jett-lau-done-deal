@@ -17,6 +17,7 @@ const About = lazy(() => import('./pages/About'));
 // const Buyers = lazy(() => import('./pages/Buyers'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Admin = lazy(() => import('./pages/Admin'));
+const Financing = lazy(() => import('./pages/Financing'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
             {/* <Route path="/buyers" element={<AnimatedPage><Buyers /></AnimatedPage>} /> */}
             <Route path="/contact" element={<AnimatedPage><Contact /></AnimatedPage>} />
             <Route path="/admin" element={<AnimatedPage><Admin /></AnimatedPage>} />
+            <Route path="/financing" element={<AnimatedPage><Financing /></AnimatedPage>} />
             {/* Wildcard 404 Route */}
             <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
           </Routes>

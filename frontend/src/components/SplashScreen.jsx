@@ -1,109 +1,127 @@
 import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { brandConfig } from '../data/brandConfig';
+import DoneDealLogo from './DoneDealLogo';
 
 /**
  * SplashScreen — GSAP-powered cinematic intro.
  *
  * Sequence:
- *  1. Logo fades in on a dark screen
- *  2. "KATINGIN BIKES" text slides up
- *  3. Hero image expands from a tiny point outward to fill the viewport
- *  4. Everything dissolves into the live site
+ *  1. Left and right diagonal panels form a solid black screen.
+ *  2. Red and blue emblem slants scale in and fade in.
+ *  3. "DONE" slides in from the left, "DEAL" slides in from the right.
+ *  4. "JETT LAU" text inside the red slant flickers on like a neon sign.
+ *  5. Hold on the finished logo.
+ *  6. Logo fades out, and the diagonal panels slide away in opposite diagonal directions
+ *     to reveal the live site.
  */
 const SplashScreen = ({ onComplete }) => {
   const containerRef = useRef(null);
-  const imgWrapRef = useRef(null);
-  const overlayRef = useRef(null);
-  const logoRef = useRef(null);
-  const titleMainRef = useRef(null);
-  const titleAccentRef = useRef(null);
-  const contentRef = useRef(null);
+  const curtainLeftRef = useRef(null);
+  const curtainRightRef = useRef(null);
+  const logoWrapRef = useRef(null);
   const [removed, setRemoved] = useState(false);
 
   useEffect(() => {
-    // Preload the hero image
+    // Preload the hero image for a seamless transition
     const preload = new Image();
     preload.fetchPriority = 'high';
     preload.src = brandConfig.images.heroBackground;
 
     let active = true;
-    const ctx = gsap.context(() => {}, containerRef); // Scopes selectors to containerRef
+    let tl;
 
-    const runAnimation = () => {
-      if (!active) return;
-      ctx.add(() => {
-        const tl = gsap.timeline({
-          onComplete: () => {
-            setRemoved(true);
-            onComplete();
-          },
-        });
-
-        // ── Phase 1: Logo fades in ──
-        tl.fromTo(logoRef.current,
-          { scale: 0.6, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.9, ease: 'back.out(1.4)' }
-        );
-
-        // ── Phase 2: "KATINGIN" slides up ──
-        tl.fromTo(titleMainRef.current,
-          { y: '120%', opacity: 0 },
-          { y: '0%', opacity: 1, duration: 0.8, ease: 'power4.out' },
-          '-=0.3'
-        );
-
-        // ── Phase 3: "BIKES" slides up (staggered) ──
-        tl.fromTo(titleAccentRef.current,
-          { y: '120%', opacity: 0 },
-          { y: '0%', opacity: 1, duration: 0.8, ease: 'power4.out' },
-          '-=0.5'
-        );
-
-        // ── Phase 5: Hold on logo/text ──
-        tl.to({}, { duration: 0.6 });
-
-        // ── Phase 6: Hero image expands from center ──
-        tl.set(imgWrapRef.current, { width: '0px', height: '0px', borderRadius: '50%', opacity: 1 });
-
-        // Fade out the text content as the image takes over
-        tl.to(contentRef.current, {
-          opacity: 0,
-          scale: 0.9,
-          duration: 0.5,
-          ease: 'power2.in',
-        });
-
-        // Expand the image from center
-        tl.to(imgWrapRef.current, {
-          width: '120vw',
-          height: '120vh',
-          borderRadius: '0px',
-          duration: 1.4,
-          ease: 'power3.inOut',
-        }, '-=0.3');
-
-        // Darken overlay
-        tl.to(overlayRef.current, {
-          opacity: 1,
-          duration: 0.6,
-          ease: 'power2.out',
-        }, '-=0.6');
-
-        // ── Phase 7: Dissolve everything ──
-        tl.to(containerRef.current, {
-          opacity: 0,
-          duration: 0.6,
-          ease: 'power2.in',
-        });
+    const ctx = gsap.context(() => {
+      // Create and initialize the timeline immediately so initial styles apply instantly
+      tl = gsap.timeline({
+        paused: true,
+        onComplete: () => {
+          setRemoved(true);
+          onComplete();
+        },
       });
+
+      // Initial setup for logo parts (runs immediately)
+      tl.set('.logo-red-slant, .logo-blue-slant', { transformOrigin: 'center', scaleY: 0, opacity: 0 });
+      tl.set('.logo-done-text', { x: -60, opacity: 0 });
+      tl.set('.logo-deal-text', { x: 60, opacity: 0 });
+      tl.set('.logo-jett-lau-text', { opacity: 0 });
+
+      // ── Phase 1: Emblem slants scale and fade in ──
+      tl.to('.logo-red-slant, .logo-blue-slant', {
+        scaleY: 1,
+        opacity: 1,
+        duration: 0.9,
+        ease: 'power3.out',
+        stagger: 0.2,
+      });
+
+      // ── Phase 2: DONE & DEAL slide in from left & right ──
+      tl.to('.logo-done-text', {
+        x: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'back.out(1.5)',
+      }, '-=0.4');
+
+      tl.to('.logo-deal-text', {
+        x: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'back.out(1.5)',
+      }, '-=0.7');
+
+      // ── Phase 3: Neon power-on flicker for JETT LAU ──
+      tl.to('.logo-jett-lau-text', { opacity: 0.3, duration: 0.05, yoyo: true, repeat: 4 });
+      tl.to('.logo-jett-lau-text', { opacity: 0.1, duration: 0.1 });
+      tl.to('.logo-jett-lau-text', { opacity: 1, duration: 0.2 });
+
+      // ── Phase 4: Hold on finished logo ──
+      tl.to({}, { duration: 0.8 });
+
+      // ── Phase 5: Fade out logo ──
+      tl.to(logoWrapRef.current, {
+        scale: 0.95,
+        opacity: 0,
+        duration: 0.4,
+        ease: 'power2.in',
+      });
+
+      // ── Phase 6: Shutter Reveal (Diagonal panels slide away) ──
+      tl.to(curtainLeftRef.current, {
+        xPercent: -100,
+        yPercent: 100,
+        duration: 1.3,
+        ease: 'power4.inOut',
+      }, '-=0.1');
+
+      tl.to(curtainRightRef.current, {
+        xPercent: 100,
+        yPercent: -100,
+        duration: 1.3,
+        ease: 'power4.inOut',
+      }, '-=1.3');
+
+      // Fade out whole container at the end of the shutter split
+      tl.to(containerRef.current, {
+        opacity: 0,
+        duration: 0.4,
+        ease: 'power2.in',
+      }, '-=0.4');
+    }, containerRef);
+
+    const startAnimation = () => {
+      if (active && tl) {
+        tl.play();
+      }
     };
 
+    // Trigger timeline once image preload has finished loading
     if (preload.complete) {
-      requestAnimationFrame(runAnimation);
+      requestAnimationFrame(startAnimation);
     } else {
-      preload.onload = () => requestAnimationFrame(runAnimation);
-      preload.onerror = () => requestAnimationFrame(runAnimation);
+      preload.onload = () => requestAnimationFrame(startAnimation);
+      preload.onerror = () => requestAnimationFrame(startAnimation);
     }
 
     return () => {
@@ -116,32 +134,13 @@ const SplashScreen = ({ onComplete }) => {
 
   return (
     <div ref={containerRef} className="splash-screen">
-      {/* Hero image — expands from center outward */}
-      <div ref={imgWrapRef} className="splash-img-wrap">
-        <img
-          src={brandConfig.images.heroBackground}
-          alt=""
-          className="splash-img"
-          fetchPriority="high"
-        />
-      </div>
+      {/* Diagonal sliding panels */}
+      <div ref={curtainLeftRef} className="splash-panel-left" />
+      <div ref={curtainRightRef} className="splash-panel-right" />
 
-      {/* Dark overlay */}
-      <div ref={overlayRef} className="splash-overlay" />
-
-      {/* Logo + Text — shown first, fades out when image expands */}
-      <div ref={contentRef} className="splash-content">
-        <img
-          ref={logoRef}
-          src="/static_data/Katingin_logo.webp"
-          alt="Katingin Bikes"
-          className="splash-logo"
-        />
-        <div className="splash-title">
-          <span ref={titleMainRef} className="splash-title-main">KATINGIN</span>
-          <span ref={titleAccentRef} className="splash-title-accent">BIKES</span>
-        </div>
-
+      {/* Done Deal Logo Wrap */}
+      <div ref={logoWrapRef} className="position-relative z-2" style={{ width: 'min(90vw, 420px)' }}>
+        <DoneDealLogo className="w-100 h-auto" textLight={true} animated={true} />
       </div>
     </div>
   );

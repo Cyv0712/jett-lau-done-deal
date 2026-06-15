@@ -14,20 +14,20 @@ const HeroSection = () => {
       }}
     >
       <Container>
-        <Row className="justify-content-center text-center">
-          <Col lg={10} className="hero-content">
+        <Row className="justify-content-start text-start">
+          <Col lg={8} md={10} className="hero-content">
             <Reveal>
               <span className="text-accent mb-3 d-block" style={{ letterSpacing: '6px', fontSize: '0.9rem', fontWeight: 600, textTransform: 'uppercase' }}>
                 {brandConfig.slogan}
               </span>
               <h1 className="moto-heading mb-4" style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', lineHeight: 1.1 }}>
-                {brandConfig.aboutHeroTitle} <br />
-                <span className="text-accent">{brandConfig.aboutHeroSubtitle}</span>
+                JETT LAU <br />
+                <span className="text-gradient">DONE DEAL</span>
               </h1>
-              <p className="lead mb-5 text-secondary mx-auto" style={{ maxWidth: '750px', fontSize: '1.2rem', opacity: 0.9 }}>
+              <p className="lead mb-5 text-secondary ms-0" style={{ maxWidth: '750px', fontSize: '1.2rem', opacity: 0.9 }}>
                 {brandConfig.aboutHeroDescription}
               </p>
-              <div className="d-flex flex-wrap gap-4 mt-4 justify-content-center">
+              <div className="d-flex flex-wrap gap-4 mt-4 justify-content-start">
                 <Link to="/inventory" className="text-decoration-none">
                   <button className="moto-btn">
                     VIEW INVENTORY <ArrowRight size={18} className="ms-2" />

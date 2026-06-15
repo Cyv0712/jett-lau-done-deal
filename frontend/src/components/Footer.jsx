@@ -3,6 +3,7 @@ import { Phone, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { brandConfig } from '../data/brandConfig';
 import { contactInfo } from '../data/contactInfo';
+import DoneDealLogo from './DoneDealLogo';
 
 // Import FontAwesome versions for specific brand logos that Lucide lacks
 import { FaWhatsapp, FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
@@ -13,23 +14,23 @@ const Footer = () => {
       <Container>
         <Row className="gy-5 mb-5">
           <Col lg={4} md={12}>
-            <h3 className="moto-heading mb-4" style={{ fontSize: '1.6rem', fontWeight: 800 }}>
-              {brandConfig.name} <span className="text-accent">{brandConfig.brandSuffix}</span>
-            </h3>
+            <div className="mb-4">
+              <DoneDealLogo height={38} />
+            </div>
             <p className="text-secondary mb-4 mx-lg-0 mx-auto" style={{ fontSize: '0.95rem', lineHeight: '1.8', maxWidth: '350px' }}>
               {brandConfig.description}
             </p>
             <div className="d-flex gap-3 mt-4">
-              <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Follow Katingin Bikes on Facebook">
+              <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Follow Jett Lau Done Deal on Facebook">
                 <FaFacebookF size={20} />
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Follow Katingin Bikes on Instagram">
+              <a href="#" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Follow Jett Lau Done Deal on Instagram">
                 <FaInstagram size={20} />
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Subscribe to Katingin Bikes on YouTube">
+              <a href="#" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Subscribe to Jett Lau Done Deal on YouTube">
                 <FaYoutube size={20} />
               </a>
-              <a href={`https://wa.me/${contactInfo.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Chat with Katingin Bikes on WhatsApp">
+              <a href={`https://wa.me/${contactInfo.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Chat with Jett Lau Done Deal on WhatsApp">
                 <FaWhatsapp size={20} />
               </a>
             </div>

@@ -1,17 +1,18 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:ital,wght@0,500;0,700;0,800;0,900;1,700;1,800;1,900&display=swap');
 
 :root {
   /* Colors */
-  --bg-void: #080808;
-  --bg-card: #121212;
-  --bg-muted: #1a1a1a;
-  --text-primary: #f0f0f0;
-  --text-muted: #949494; /* Brighter for contrast compliance */
-  --accent-primary: #D4AF37;
-  /* Katingin Gold */
-  --accent-hover: #FFD700;
-  --border-color: #222222;
+  --bg-void: #050505;
+  --bg-card: #0d0d0d;
+  --bg-muted: #141414;
+  --text-primary: #ffffff;
+  --text-muted: #a0a0a0;
+  --accent-red: #FF1E27;
+  --accent-blue: #0055D4;
+  --accent-primary: var(--accent-red);
+  --accent-hover: #ff3840;
+  --border-color: #1c1c1c;
   --color-destructive: #dc3545;
 }
 
@@ -36,7 +37,7 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-primary);
+  background: var(--accent-blue);
 }
 
 /* ── Base ── */
@@ -91,14 +92,22 @@ h6,
   color: var(--accent-primary) !important;
 }
 
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
 /* ── Buttons ── */
 .moto-btn {
   font-family: 'Montserrat', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  background: var(--accent-primary);
-  color: var(--bg-void);
-  border: 1px solid var(--accent-primary);
+  background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-blue) 100%);
+  color: #ffffff;
+  border: none;
   padding: 12px 28px;
   font-weight: 700;
   font-size: 0.9rem;
@@ -112,21 +121,22 @@ h6,
 }
 
 .moto-btn:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  color: var(--bg-void);
+  background: linear-gradient(135deg, #ff3840 0%, #1a6cff 100%);
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 30, 39, 0.4);
 }
 
 .moto-btn-outline {
   background: transparent;
-  color: var(--accent-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
 
 .moto-btn-outline:hover {
-  background: var(--accent-primary);
-  color: var(--bg-void);
+  background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-blue) 100%);
+  color: #ffffff;
+  border-color: transparent;
 }
 
 /* ── Cards & Containers ── */
@@ -141,8 +151,8 @@ h6,
 }
 
 .moto-card:hover {
-  border-color: rgba(212, 175, 55, 0.5);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 30, 39, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 30, 39, 0.2), 0 0 15px rgba(0, 85, 212, 0.2);
   transform: translateY(-4px);
 }
 
@@ -507,8 +517,30 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #050505;
+  background: transparent;
   overflow: hidden;
+}
+
+.splash-panel-left {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  background: #050505;
+  clip-path: polygon(0 0, 101% 0, 0 101%);
+  z-index: 1;
+}
+
+.splash-panel-right {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  background: #050505;
+  clip-path: polygon(101% -1%, 101% 101%, -1% 101%);
+  z-index: 1;
 }
 
 /* The "card" wrapper — GSAP animates width, height, borderRadius */

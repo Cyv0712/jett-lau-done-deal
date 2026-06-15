@@ -9,12 +9,12 @@ const About = () => {
   return (
     <div className="about-page pb-5">
       <Helmet>
-        <title>About Us | Katingin Bikes</title>
-        <meta name="description" content="Discover Katingin Bikes. Learn about our roots, our commitment to transparency, verified quality inspecton, and clean papers." />
-        <meta property="og:title" content="About Us | Katingin Bikes" />
-        <meta property="og:description" content="Learn about our roots, story, and commitment to transparency." />
-        <meta property="og:image" content="https://katinginbikes.com/static_data/Katingin_logo.png" />
-        <meta property="og:url" content="https://katinginbikes.com/about" />
+        <title>About Us | Jett Lau Done Deal</title>
+        <meta name="description" content="Discover Jett Lau Done Deal. Learn about our story, motovlogging roots, the Honest Note Philosophy, and premium adventure big bikes." />
+        <meta property="og:title" content="About Us | Jett Lau Done Deal" />
+        <meta property="og:description" content="Learn about our roots, story, and the Honest Note Philosophy." />
+        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/jett_lau_favicon-removebg-preview.webp" />
+        <meta property="og:url" content="https://jettlaudonedeal.com/about" />
       </Helmet>
       {/* ── 1. Hero Section ── */}
       <section

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Container, Table, Form, Modal, Row, Col } from 'react-bootstrap';
-import { Trash, Plus, Bike, Banknote, TrendingUp, LogOut, Check, Database, Lock, ShieldAlert, Eye, EyeOff } from 'lucide-react';
-import { apiUrl } from '../config/api';
+import { Trash, Plus, Bike, Banknote, TrendingUp, LogOut, Check, Database, Lock, ShieldAlert, Eye, EyeOff, Pencil, Search } from 'lucide-react';
+import { apiUrl, toAbsoluteUploadUrl } from '../config/api';
 
 // Parse price strings like "₱450,000" → 450000
 const parsePrice = (priceStr) => {
@@ -42,6 +42,9 @@ const Admin = () => {
   const [successModal, setSuccessModal] = useState({ show: false, message: '' });
   const [showSoldModal, setShowSoldModal] = useState(false);
   const [bikeToMarkSold, setBikeToMarkSold] = useState(null);
+  const [editingBike, setEditingBike] = useState(null);
+  const [currentImages, setCurrentImages] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const showSuccess = (message) => {
     setSuccessModal({ show: true, message });
@@ -127,6 +130,41 @@ const Admin = () => {
   };
   const handleFileChange = (e) => setImageFiles(Array.from(e.target.files));
 
+  const handleEditClick = (bike) => {
+    setEditingBike(bike);
+    setCurrentImages(bike.images || []);
+    const cleanEngine = bike.engineSize ? bike.engineSize.toLowerCase().replace('cc', '').trim() : '';
+    const cleanMileage = bike.mileage ? String(bike.mileage).replace(/[^0-9]/g, '') : '';
+    const cleanPrice = bike.price ? String(bike.price).replace(/[^0-9]/g, '') : '';
+
+    setFormData({
+      combinedIdentity: `${bike.brand} ${bike.model} ${cleanEngine}`.trim(),
+      type: bike.type || '',
+      year: bike.year || '',
+      mileage: cleanMileage,
+      price: cleanPrice,
+      description: bike.description || '',
+      issues: bike.issues || '',
+      engineConfig: bike.engineConfig || '',
+      power: bike.power ? String(bike.power).replace(/[^0-9]/g, '') : '',
+      transmission: bike.transmission || '',
+      fuelCapacity: bike.fuelCapacity ? String(bike.fuelCapacity).replace(/[^0-9]/g, '') : '',
+      brand: bike.brand || '',
+      model: bike.model || '',
+      engineSize: bike.engineSize || ''
+    });
+    setImageFiles([]);
+    setShowModal(true);
+  };
+
+  const setAsCurrentThumbnail = (index) => {
+    if (index === 0) return;
+    const newImages = [...currentImages];
+    const [selected] = newImages.splice(index, 1);
+    newImages.unshift(selected);
+    setCurrentImages(newImages);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -178,10 +216,17 @@ const Admin = () => {
     
     imageFiles.forEach((file) => data.append('images', file));
 
+    if (editingBike && imageFiles.length === 0) {
+      currentImages.forEach((img) => data.append('existingImages', img));
+    }
+
     try {
       const token = sessionStorage.getItem('adminToken');
-      const res = await fetch(apiUrl('/api/bikes'), { 
-        method: 'POST', 
+      const url = editingBike ? apiUrl(`/api/bikes/${editingBike._id}`) : apiUrl('/api/bikes');
+      const method = editingBike ? 'PUT' : 'POST';
+
+      const res = await fetch(url, { 
+        method: method, 
         body: data,
         headers: {
           'Authorization': `Bearer ${token}`
@@ -199,8 +244,9 @@ const Admin = () => {
       setShowModal(false);
       setFormData(EMPTY_FORM);
       setImageFiles([]);
+      setEditingBike(null);
       await fetchBikes();
-      showSuccess('New unit was successfully added to inventory.');
+      showSuccess(editingBike ? 'Unit details were successfully updated.' : 'New unit was successfully added to inventory.');
     } catch (err) {
       console.error('Failed to add bike:', err);
       if (err.name !== 'TypeError') {
@@ -292,6 +338,21 @@ const Admin = () => {
     return { count, totalInventoryValue, totalIncome, availableBikes, soldBikes };
   }, [bikes]);
 
+  const filteredBikes = useMemo(() => {
+    const list = view === 'Available' ? stats.availableBikes : stats.soldBikes;
+    const searchTerm = searchQuery.toLowerCase().trim();
+    if (!searchTerm) return list;
+
+    const searchWords = searchTerm.split(/\s+/).filter(Boolean);
+    return list.filter((bike) =>
+      searchWords.every((word) =>
+        bike.brand?.toLowerCase().includes(word) ||
+        bike.model?.toLowerCase().includes(word) ||
+        bike.type?.toLowerCase().includes(word)
+      )
+    );
+  }, [view, stats, searchQuery]);
+
   // ── Login Screen ──
   if (!isAuthenticated) {
     return (
@@ -364,7 +425,16 @@ const Admin = () => {
             >
               <LogOut size={16} className="me-2" /> LOGOUT
             </button>
-            <button onClick={() => setShowModal(true)} className="moto-btn" style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
+            <button 
+              onClick={() => {
+                setEditingBike(null);
+                setFormData(EMPTY_FORM);
+                setImageFiles([]);
+                setShowModal(true);
+              }} 
+              className="moto-btn" 
+              style={{ padding: '8px 16px', fontSize: '0.85rem' }}
+            >
               <Plus size={16} className="me-2" /> ADD NEW UNIT
             </button>
           </div>
@@ -405,23 +475,38 @@ const Admin = () => {
           ))}
         </Row>
 
-        {/* View Selector */}
+        {/* View Selector & Search */}
         <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-3 mb-4 mt-5">
           <h4 className="moto-heading mb-0" style={{ fontSize: '1.4rem' }}>
              <Database size={20} className="text-accent me-2" /> 
              {view === 'Available' ? 'ACTIVE INVENTORY' : 'SOLD UNITS'}
           </h4>
-          <Form.Group style={{ width: '100%', maxWidth: '250px' }}>
-             <small className="text-secondary fw-bold d-block mb-1" style={{ fontSize: '0.75rem', letterSpacing: '1px' }}>VIEW STATUS</small>
-             <Form.Select 
-              value={view} 
-              onChange={(e) => setView(e.target.value)}
-              className="moto-input"
-            >
-              <option value="Available">Active Inventory</option>
-              <option value="Sold">Sold Units</option>
-            </Form.Select>
-          </Form.Group>
+          <div className="d-flex flex-column flex-sm-row gap-3 align-items-sm-end" style={{ width: '100%', maxWidth: '500px' }}>
+            <Form.Group className="flex-grow-1">
+              <small className="text-secondary fw-bold d-block mb-1" style={{ fontSize: '0.75rem', letterSpacing: '1px' }}>SEARCH INVENTORY</small>
+              <div className="position-relative">
+                <Search size={16} className="text-muted position-absolute" style={{ left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+                <Form.Control
+                  type="text"
+                  placeholder="Search brand, model, type..."
+                  className="moto-input moto-input-with-icon"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </Form.Group>
+            <Form.Group style={{ minWidth: '180px' }}>
+               <small className="text-secondary fw-bold d-block mb-1" style={{ fontSize: '0.75rem', letterSpacing: '1px' }}>VIEW STATUS</small>
+               <Form.Select 
+                value={view} 
+                onChange={(e) => setView(e.target.value)}
+                className="moto-input"
+              >
+                <option value="Available">Active Inventory</option>
+                <option value="Sold">Sold Units</option>
+              </Form.Select>
+            </Form.Group>
+          </div>
         </div>
 
         <div className="admin-table-wrapper">
@@ -438,21 +523,26 @@ const Admin = () => {
               </tr>
             </thead>
             <tbody>
-              {view === 'Available' ? (
-                stats.availableBikes.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="text-center text-muted py-5">No available units in inventory.</td>
-                  </tr>
-                ) : (
-                  stats.availableBikes.map((bike) => (
-                    <tr key={bike._id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                      <td className="py-3 ps-4">{bike.brand}</td>
-                      <td className="py-3">{bike.model}</td>
-                      <td className="py-3">{bike.type.toUpperCase()}</td>
-                      <td className="py-3">{bike.year}</td>
-                      <td className="py-3 text-accent fw-bold">{bike.price}</td>
-                      <td className="py-3 pe-4">
+              {filteredBikes.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center text-muted py-5">
+                    {searchQuery ? 'No matching units found.' : `No ${view === 'Available' ? 'available' : 'sold'} units in inventory.`}
+                  </td>
+                </tr>
+              ) : (
+                filteredBikes.map((bike) => (
+                  <tr key={bike._id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                    <td className="py-3 ps-4">{bike.brand}</td>
+                    <td className="py-3">{bike.model}</td>
+                    <td className="py-3">{bike.type ? bike.type.toUpperCase() : '—'}</td>
+                    <td className="py-3">{bike.year || '—'}</td>
+                    <td className={`py-3 fw-bold ${view === 'Available' ? 'text-accent' : 'text-muted'}`}>{bike.price}</td>
+                    <td className="py-3 pe-4">
+                      {view === 'Available' ? (
                         <div className="d-flex justify-content-center gap-2">
+                          <button className="p-1" style={{ background: 'none', border: 'none', color: '#60a5fa' }} onClick={() => handleEditClick(bike)} title="Edit Unit">
+                            <Pencil size={18} />
+                          </button>
                           <button className="p-1 text-accent" style={{ background: 'none', border: 'none' }} onClick={() => handleMarkAsSold(bike._id)} title="Mark as Sold">
                             <Check size={18} />
                           </button>
@@ -460,43 +550,28 @@ const Admin = () => {
                             <Trash size={18} />
                           </button>
                         </div>
-                      </td>
-                    </tr>
-                  ))
-                )
-              ) : (
-                stats.soldBikes.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="text-center text-muted py-5">No sold units found.</td>
-                  </tr>
-                ) : (
-                  stats.soldBikes.map((bike) => (
-                    <tr key={bike._id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                      <td className="py-3 ps-4">{bike.brand}</td>
-                      <td className="py-3">{bike.model}</td>
-                      <td className="py-3">{bike.type ? bike.type.toUpperCase() : '—'}</td>
-                      <td className="py-3">{bike.year || '—'}</td>
-                      <td className="py-3 text-muted fw-bold">{bike.price}</td>
-                      <td className="py-3 pe-4">
+                      ) : (
                         <div className="d-flex justify-content-center">
                           <button className="p-1 text-destructive" style={{ background: 'none', border: 'none' }} onClick={() => handleDelete(bike._id)} title="Delete Unit">
                             <Trash size={18} />
                           </button>
                         </div>
-                      </td>
-                    </tr>
-                  ))
-                )
+                      )}
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </Table>
           </div>
         </div>
 
-        {/* Add Bike Modal */}
-        <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
+        {/* Add/Edit Bike Modal */}
+        <Modal show={showModal} onHide={() => { setShowModal(false); setEditingBike(null); }} size="lg" centered>
           <Modal.Header className="border-0 p-4 pb-0 bg-dark text-white" closeVariant="white">
-            <Modal.Title className="moto-heading" style={{ fontSize: '1.4rem' }}>ADD NEW UNIT</Modal.Title>
+            <Modal.Title className="moto-heading" style={{ fontSize: '1.4rem' }}>
+              {editingBike ? 'EDIT MOTORCYCLE UNIT' : 'ADD NEW UNIT'}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body className="p-4 bg-dark text-white">
             <Form onSubmit={handleSubmit}>
@@ -584,7 +659,7 @@ const Admin = () => {
                       onChange={handleFileChange}
                       multiple
                       accept="image/*"
-                      required
+                      required={!editingBike}
                       className="moto-input text-white"
                     />
                     {imageFiles.length > 0 && (
@@ -615,6 +690,39 @@ const Admin = () => {
                         ))}
                       </div>
                     )}
+                    {editingBike && currentImages && currentImages.length > 0 && imageFiles.length === 0 && (
+                      <div className="mt-3">
+                        <small className="text-secondary d-block mb-2" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.5px' }}>
+                          CURRENT IMAGES (Click an image to set as thumbnail. Uploading new files will replace these):
+                        </small>
+                        <div className="d-flex flex-wrap gap-2 p-3 rounded" style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.05)' }}>
+                          {currentImages.map((imgUrl, idx) => (
+                            <div 
+                              key={idx} 
+                              className="position-relative" 
+                              style={{ cursor: 'pointer', width: '80px', height: '80px' }}
+                              onClick={() => setAsCurrentThumbnail(idx)}
+                              title={idx === 0 ? 'Current Thumbnail' : 'Click to set as thumbnail'}
+                            >
+                              <img 
+                                src={toAbsoluteUploadUrl(imgUrl)} 
+                                alt="current" 
+                                className={`w-100 h-100 rounded object-fit-cover ${idx === 0 ? 'border border-accent border-2' : 'opacity-50'}`}
+                              />
+                              {idx === 0 ? (
+                                <div className="position-absolute bottom-0 start-0 w-100 bg-accent text-dark text-center" style={{ fontSize: '0.6rem', fontWeight: 900 }}>
+                                  THUMBNAIL
+                                </div>
+                              ) : (
+                                <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-white opacity-0 hover-opacity-100" style={{ fontSize: '0.6rem', background: 'rgba(0,0,0,0.4)' }}>
+                                  SET MAIN
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </Form.Group>
                 </div>
               </div>
@@ -623,7 +731,7 @@ const Admin = () => {
                 className="moto-btn w-100 mt-5 py-3"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'SAVING...' : 'SAVE UNIT'}
+                {isSubmitting ? 'SAVING...' : (editingBike ? 'SAVE CHANGES' : 'SAVE UNIT')}
               </button>
             </Form>
           </Modal.Body>

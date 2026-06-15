@@ -9,13 +9,9 @@ export const apiUrl = (path = '') => {
 export const toAbsoluteUploadUrl = (path) => {
   if (!path) return path;
   if (/^https?:\/\//i.test(path)) {
-    // Inject Cloudinary auto-format (WebP/AVIF) and auto-quality optimizations dynamically
-    if (path.includes('res.cloudinary.com') && !path.includes('f_auto') && !path.includes('q_auto')) {
-      const uploadMarker = '/upload/';
-      const idx = path.indexOf(uploadMarker);
-      if (idx !== -1) {
-        return path.slice(0, idx + uploadMarker.length) + 'f_auto,q_auto/' + path.slice(idx + uploadMarker.length);
-      }
+    if (path.includes('res.cloudinary.com')) {
+      const cleanPath = path.replace(/\/f_auto,q_auto\//g, '/');
+      return apiUrl(`/api/bikes/image-proxy?url=${encodeURIComponent(cleanPath)}`);
     }
     return path;
   }

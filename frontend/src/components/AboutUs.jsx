@@ -9,7 +9,7 @@ const AboutUs = () => {
         <Reveal>
           <div className="text-center mb-5">
              <span className="text-accent mb-2 d-block" style={{ fontSize: '0.85rem', letterSpacing: '4px', fontWeight: 600 }}>OUR COMMITMENT</span>
-             <h2 className="moto-heading mb-0">THE KATINGIN DIFFERENCE</h2>
+             <h2 className="moto-heading mb-0">THE DONE DEAL DIFFERENCE</h2>
           </div>
         </Reveal>
         

@@ -33,7 +33,7 @@ const Contact = () => {
             newTab.location.href = 'https://www.viber.com/en/download/';
           }
         }
-      } catch (err) {
+      } catch {
         // Safe to ignore: a cross-origin error means it successfully navigated or launched
       }
     }, 2000);
@@ -42,12 +42,12 @@ const Contact = () => {
   return (
     <div className="contact-page pb-5" style={{ backgroundColor: 'var(--bg-void)', minHeight: '100vh', paddingTop: '76px' }}>
       <Helmet>
-        <title>Contact Us | Katingin Bikes</title>
-        <meta name="description" content="Connect with Katingin Bikes. Reach out directly via Viber, Facebook Messenger, or Email for big bike availability and financing inquiries." />
-        <meta property="og:title" content="Contact Us | Katingin Bikes" />
+        <title>Contact Us | Jett Lau Done Deal</title>
+        <meta name="description" content="Connect with Jett Lau Done Deal. Reach out directly via Viber, Facebook Messenger, or Email for big bike availability and financing inquiries." />
+        <meta property="og:title" content="Contact Us | Jett Lau Done Deal" />
         <meta property="og:description" content="Reach out to us directly via Viber, Facebook Messenger, or Email." />
-        <meta property="og:image" content="https://katinginbikes.com/static_data/Katingin_logo.png" />
-        <meta property="og:url" content="https://katinginbikes.com/contact" />
+        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/jett_lau_favicon-removebg-preview.webp" />
+        <meta property="og:url" content="https://jettlaudonedeal.com/contact" />
       </Helmet>
       {/* ── 1. Hero Section ── */}
       <section
@@ -109,7 +109,7 @@ const Contact = () => {
                     <FaFacebookF size={30} />
                   </div>
                   <h4 className="moto-heading mb-2" style={{ fontSize: '1.2rem' }}>MESSENGER</h4>
-                  <p className="text-secondary mb-4">Katingin Bikes</p>
+                  <p className="text-secondary mb-4">Jett Lau Done Deal</p>
                   <div className="text-accent small fw-bold mt-auto">CHAT WITH US</div>
                 </a>
               </Reveal>

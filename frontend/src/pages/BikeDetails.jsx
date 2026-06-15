@@ -85,7 +85,7 @@ const BikeDetails = () => {
 
   const cleanPrice = parseFloat(String(bike.price).replace(/[^0-9.]/g, '')) || 0;
   const firstImage = images.length > 0 ? getImageUrl(images[0]) : '';
-  const absoluteImage = firstImage.startsWith('http') ? firstImage : `https://katinginbikes.com${firstImage}`;
+  const absoluteImage = firstImage.startsWith('http') ? firstImage : `https://jettlaudonedeal.com${firstImage}`;
 
   const schemaData = {
     "@context": "https://schema.org/",
@@ -95,7 +95,7 @@ const BikeDetails = () => {
     "description": bike.description || `Fresh pre-owned ${bike.brand} ${bike.model} big bike for sale.`,
     "offers": {
       "@type": "Offer",
-      "url": `https://katinginbikes.com/bike/${bike._id}`,
+      "url": `https://jettlaudonedeal.com/bike/${bike._id}`,
       "priceCurrency": "PHP",
       "price": cleanPrice,
       "availability": bike.status === 'Sold' ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
@@ -106,12 +106,12 @@ const BikeDetails = () => {
   return (
     <div style={{ paddingTop: '120px', paddingBottom: '100px', minHeight: '100vh' }}>
       <Helmet>
-        <title>{`${bike.brand} ${bike.model} (${bike.year}) | Katingin Bikes`}</title>
+        <title>{`${bike.brand} ${bike.model} (${bike.year}) | Jett Lau Done Deal`}</title>
         <meta name="description" content={`Get this fresh pre-owned ${bike.brand} ${bike.model} (${bike.year}). Price: ${withPeso(bike.price)}, Engine: ${bike.engineSize}, Config: ${bike.engineConfig || 'N/A'}. Check clean papers.`} />
         <meta property="og:title" content={`${bike.brand} ${bike.model} (${bike.year}) - For Sale`} />
-        <meta property="og:description" content={`Fresh pre-owned ${bike.brand} ${bike.model} big bike for sale at Katingin Bikes.`} />
+        <meta property="og:description" content={`Fresh pre-owned ${bike.brand} ${bike.model} big bike for sale at Jett Lau Done Deal.`} />
         <meta property="og:image" content={absoluteImage} />
-        <meta property="og:url" content={`https://katinginbikes.com/bike/${bike._id}`} />
+        <meta property="og:url" content={`https://jettlaudonedeal.com/bike/${bike._id}`} />
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}
         </script>
