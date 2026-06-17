@@ -21,11 +21,12 @@ const JettLauLogo = ({ className = '', height = 40, width = 'auto', textLight = 
       <g filter="url(#logo-glow)">
         {/* "JETT" */}
         <text 
-          x="10" 
+          x="21.9" 
           y="56" 
           fill={textColor} 
+          transform="skewX(-12)"
           style={{ 
-            fontFamily: "'Montserrat', sans-serif", 
+            fontFamily: 'Montserrat, sans-serif', 
             fontWeight: 900, 
             fontSize: '44px', 
             fontStyle: 'italic',
@@ -52,11 +53,12 @@ const JettLauLogo = ({ className = '', height = 40, width = 'auto', textLight = 
 
         {/* "LAU" */}
         <text 
-          x="300" 
+          x="311.9" 
           y="56" 
           fill={textColor} 
+          transform="skewX(-12)"
           style={{ 
-            fontFamily: "'Montserrat', sans-serif", 
+            fontFamily: 'Montserrat, sans-serif', 
             fontWeight: 900, 
             fontSize: '44px', 
             fontStyle: 'italic',

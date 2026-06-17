@@ -22,11 +22,12 @@ const DoneDealLogo = ({ className = '', height = 50, width = 'auto', textLight =
         {/* "DONE" */}
         <text
           className="logo-done-text"
-          x="-5"
+          x="6.3"
           y="53"
           fill={textColor}
+          transform="skewX(-12)"
           style={{
-            fontFamily: "'Montserrat', sans-serif",
+            fontFamily: 'Montserrat, sans-serif',
             fontWeight: 900,
             fontSize: '48px',
             fontStyle: 'italic',
@@ -49,12 +50,13 @@ const DoneDealLogo = ({ className = '', height = 50, width = 'auto', textLight =
           {/* Text inside the red bar */}
           <text
             className="logo-jett-lau-text"
-            x="96"
+            x="111.1"
             y="71"
             fill="#ffffff"
             textAnchor="middle"
+            transform="skewX(-12)"
             style={{
-              fontFamily: "'Montserrat', sans-serif",
+              fontFamily: 'Montserrat, sans-serif',
               fontWeight: 900,
               fontSize: '11px',
               fontStyle: 'italic',
@@ -77,11 +79,12 @@ const DoneDealLogo = ({ className = '', height = 50, width = 'auto', textLight =
         {/* "DEAL" */}
         <text
           className="logo-deal-text"
-          x="210"
+          x="221.3"
           y="53"
           fill={textColor}
+          transform="skewX(-12)"
           style={{
-            fontFamily: "'Montserrat', sans-serif",
+            fontFamily: 'Montserrat, sans-serif',
             fontWeight: 900,
             fontSize: '48px',
             fontStyle: 'italic',
