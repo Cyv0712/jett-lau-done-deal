@@ -30,14 +30,14 @@ const ShowcaseDetails = () => {
             const combinedLive = `${liveModel} ${liveEngine}`.replace(/[^\w\s]/g, '').trim();
 
             // Custom-tailored matches for the showcase collection:
-            if (bike.slug === 'honda-africa-twin') {
-              return combinedLive.includes('africa') && combinedLive.includes('twin');
+            if (bike.slug === 'ducati-multistrada') {
+              return combinedLive.includes('multistrada');
             }
-            if (bike.slug === 'yamaha-tracer-900') {
-              return combinedLive.includes('tracer') && (combinedLive.includes('900') || combinedLive.includes('gt'));
+            if (bike.slug === 'yamaha-tmax') {
+              return combinedLive.includes('tmax');
             }
-            if (bike.slug === 'kawasaki-versys-650') {
-              return combinedLive.includes('versys') && (combinedLive.includes('650') || combinedLive.includes('600'));
+            if (bike.slug === 'kawasaki-zx6r') {
+              return combinedLive.includes('zx6r') || combinedLive.includes('zx-6r') || combinedLive.includes('zx') || combinedLive.includes('ninja');
             }
 
             // Fallback matching
@@ -90,17 +90,17 @@ const ShowcaseDetails = () => {
   }
 
   const cleanImage = bike.images && bike.images.length > 0 ? bike.images[0] : '';
-  const absoluteImage = cleanImage.startsWith('http') ? cleanImage : `https://katinginbikes.com${cleanImage}`;
+  const absoluteImage = cleanImage.startsWith('http') ? cleanImage : `https://jettlaudonedeal.com${cleanImage}`;
 
   const schemaData = {
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": `${bike.brand} ${bike.model}`,
     "image": absoluteImage,
-    "description": bike.description || `Hall of fame showcase page for the legendary ${bike.brand} ${bike.model} at Katingin Bikes.`,
+    "description": bike.description || `Hall of fame showcase page for the legendary ${bike.brand} ${bike.model} at Jett Lau Done Deal.`,
     "offers": {
       "@type": "Offer",
-      "url": `https://katinginbikes.com/showcase/${bike.slug}`,
+      "url": `https://jettlaudonedeal.com/showcase/${bike.slug}`,
       "priceCurrency": "PHP",
       "availability": inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       "itemCondition": "https://schema.org/UsedCondition"
@@ -110,12 +110,12 @@ const ShowcaseDetails = () => {
   return (
     <div style={{ paddingTop: '120px', paddingBottom: '100px', minHeight: '100vh', backgroundColor: 'var(--bg-void)' }}>
       <Helmet>
-        <title>{`${bike.brand} ${bike.model} | Katingin Bikes Showcase`}</title>
-        <meta name="description" content={`Discover the ${bike.brand} ${bike.model} at Katingin Bikes Hall of Fame. ${bike.tagline || ''}. Specifications, features, and live availability.`} />
+        <title>{`${bike.brand} ${bike.model} | Jett Lau Done Deal Showcase`}</title>
+        <meta name="description" content={`Discover the ${bike.brand} ${bike.model} at Jett Lau Done Deal Hall of Fame. ${bike.tagline || ''}. Specifications, features, and live availability.`} />
         <meta property="og:title" content={`${bike.brand} ${bike.model} - Showcase Details`} />
-        <meta property="og:description" content={`Curated specs and hall of fame details for ${bike.brand} ${bike.model} at Katingin Bikes.`} />
+        <meta property="og:description" content={`Curated specs and hall of fame details for ${bike.brand} ${bike.model} at Jett Lau Done Deal.`} />
         <meta property="og:image" content={absoluteImage} />
-        <meta property="og:url" content={`https://katinginbikes.com/showcase/${bike.slug}`} />
+        <meta property="og:url" content={`https://jettlaudonedeal.com/showcase/${bike.slug}`} />
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}
         </script>
@@ -136,18 +136,27 @@ const ShowcaseDetails = () => {
                 )}
               </div>
               
-              <Carousel interval={null}>
-                {bike.images.map((imgSrc, idx) => (
-                  <Carousel.Item key={idx}>
-                    <img 
-                      src={imgSrc} 
-                      alt={`${bike.model} detail ${idx + 1}`} 
-                      className="d-block w-100 rounded" 
-                      style={{ height: 'clamp(260px, 45vw, 600px)', objectFit: 'cover' }} 
-                    />
-                  </Carousel.Item>
-                ))}
-              </Carousel>
+              {bike.images && bike.images.length > 1 ? (
+                <Carousel interval={null}>
+                  {bike.images.map((imgSrc, idx) => (
+                    <Carousel.Item key={idx}>
+                      <img 
+                        src={imgSrc} 
+                        alt={`${bike.model} detail ${idx + 1}`} 
+                        className="d-block w-100 rounded" 
+                        style={{ height: 'clamp(260px, 45vw, 600px)', objectFit: 'cover' }} 
+                      />
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              ) : (
+                <img 
+                  src={bike.images && bike.images.length > 0 ? bike.images[0] : ''} 
+                  alt={bike.model} 
+                  className="d-block w-100 rounded" 
+                  style={{ height: 'clamp(260px, 45vw, 600px)', objectFit: 'cover' }} 
+                />
+              )}
             </div>
           </Col>
           

@@ -62,8 +62,9 @@ async function optimizeImageBuffer(buffer) {
     .toBuffer();
 }
 
-async function uploadBufferToCloudinary(file) {
+async function uploadBufferToCloudinary(file, bikeName = '') {
   const folder = process.env.CLOUDINARY_FOLDER || 'jett-lau-done-deal/bikes';
+  const displayBike = bikeName ? ` for [${bikeName}]` : '';
   
   try {
     const optimizedBuffer = await optimizeImageBuffer(file.buffer);
@@ -73,7 +74,7 @@ async function uploadBufferToCloudinary(file) {
     // Create a unique filename
     const fileName = `${Date.now()}-${Math.round(Math.random() * 1e6)}`;
     
-    console.log('--- Cloudinary Upload Start ---');
+    console.log(`--- Cloudinary Upload Start${displayBike} ---`);
     console.log('Target Path:', `${folder}/${fileName}`);
     
     const result = await cloudinary.uploader.upload(dataUri, {
@@ -82,19 +83,21 @@ async function uploadBufferToCloudinary(file) {
       resource_type: 'image',
       overwrite: true
     });
-    console.log('Upload Success! URL:', result.secure_url);
+    console.log(`Upload Success${displayBike}! URL:`, result.secure_url);
     return result.secure_url;
   } catch (err) {
-    console.error('Cloudinary Upload FAILED:', err.message);
-    throw err;
+    const errMsg = err.error?.message || err.message || 'Unknown Cloudinary error';
+    console.error(`Cloudinary Upload FAILED${displayBike}:`, errMsg);
+    throw new Error(errMsg);
   }
 }
 
-async function writeBufferToDisk(file) {
+async function writeBufferToDisk(file, bikeName = '') {
   const uploadDir = path.join(__dirname, '..', 'uploads');
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
+  const displayBike = bikeName ? ` for [${bikeName}]` : '';
   try {
     const optimizedBuffer = await optimizeImageBuffer(file.buffer);
     const filename =
@@ -103,7 +106,7 @@ async function writeBufferToDisk(file) {
     fs.writeFileSync(dest, optimizedBuffer);
     return `/uploads/${filename}`;
   } catch (err) {
-    console.error('Write buffer to disk optimization failed, writing raw file:', err.message);
+    console.error(`Write buffer to disk optimization failed${displayBike}, writing raw file:`, err.message);
     const filename =
       Date.now() + '-' + Math.round(Math.random() * 1e6) + path.extname(file.originalname || '.jpg');
     const dest = path.join(uploadDir, filename);
@@ -114,16 +117,17 @@ async function writeBufferToDisk(file) {
 
 /**
  * @param {Express.Multer.File[]} files
+ * @param {string} [bikeName]
  * @returns {Promise<string[]>}
  */
-async function persistUploadedImages(files) {
+async function persistUploadedImages(files, bikeName = '') {
   if (!files?.length) return [];
   if (isCloudinaryConfigured()) {
-    return Promise.all(files.map((f) => uploadBufferToCloudinary(f)));
+    return Promise.all(files.map((f) => uploadBufferToCloudinary(f, bikeName)));
   }
   const urls = [];
   for (const file of files) {
-    urls.push(await writeBufferToDisk(file));
+    urls.push(await writeBufferToDisk(file, bikeName));
   }
   return urls;
 }

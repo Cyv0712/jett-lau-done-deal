@@ -32,14 +32,14 @@ const FeaturedBikes = () => {
       const combinedLive = `${liveModel} ${liveEngine}`.replace(/[^\w\s]/g, '').trim();
 
       // Custom-tailored matches for the showcase collection:
-      if (showcaseBike.slug === 'honda-africa-twin') {
-        return combinedLive.includes('africa') && combinedLive.includes('twin');
+      if (showcaseBike.slug === 'ducati-multistrada') {
+        return combinedLive.includes('multistrada');
       }
-      if (showcaseBike.slug === 'yamaha-tracer-900') {
-        return combinedLive.includes('tracer') && (combinedLive.includes('900') || combinedLive.includes('gt'));
+      if (showcaseBike.slug === 'yamaha-tmax') {
+        return combinedLive.includes('tmax');
       }
-      if (showcaseBike.slug === 'kawasaki-versys-650') {
-        return combinedLive.includes('versys') && (combinedLive.includes('650') || combinedLive.includes('600'));
+      if (showcaseBike.slug === 'kawasaki-zx6r') {
+        return combinedLive.includes('zx6r') || combinedLive.includes('zx-6r') || combinedLive.includes('zx') || combinedLive.includes('ninja');
       }
 
       // Fallback matching
@@ -80,19 +80,29 @@ const FeaturedBikes = () => {
                     </div>
 
                     <div className="bike-img-wrapper" style={{ height: '400px', overflow: 'hidden' }}>
-                      <Carousel interval={null} slide={true} className="h-100">
-                        {bike.images.map((imgSrc, idx) => (
-                          <Carousel.Item key={idx} className="h-100">
-                            <img
-                              src={imgSrc}
-                              alt={`${bike.model} angle ${idx + 1}`}
-                              className="d-block w-100 h-100"
-                              style={{ objectFit: 'cover', objectPosition: 'top' }}
-                              loading="lazy"
-                            />
-                          </Carousel.Item>
-                        ))}
-                      </Carousel>
+                      {bike.images && bike.images.length > 1 ? (
+                        <Carousel interval={null} slide={true} className="h-100">
+                          {bike.images.map((imgSrc, idx) => (
+                            <Carousel.Item key={idx} className="h-100">
+                              <img
+                                src={imgSrc}
+                                alt={`${bike.model} angle ${idx + 1}`}
+                                className="d-block w-100 h-100"
+                                style={{ objectFit: 'cover', objectPosition: 'top' }}
+                                loading="lazy"
+                              />
+                            </Carousel.Item>
+                          ))}
+                        </Carousel>
+                      ) : (
+                        <img
+                          src={bike.images && bike.images.length > 0 ? bike.images[0] : 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=800'}
+                          alt={bike.model}
+                          className="d-block w-100 h-100"
+                          style={{ objectFit: 'cover', objectPosition: 'top' }}
+                          loading="lazy"
+                        />
+                      )}
                     </div>
 
                     <div className="p-4 d-flex flex-column flex-grow-1">

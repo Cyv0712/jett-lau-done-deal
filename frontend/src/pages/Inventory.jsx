@@ -26,6 +26,25 @@ const withPeso = (value) => {
   return str.startsWith('₱') ? str : `₱${str}`;
 };
 
+const shouldAppendEngineSize = (model, engineSize) => {
+  if (!engineSize) return false;
+  const cleanEngine = String(engineSize).replace(/[^0-9]/g, '');
+  if (!cleanEngine) return false;
+  
+  const cleanModel = String(model).toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (cleanModel.includes(cleanEngine)) return false;
+  
+  const modelNumbers = cleanModel.match(/\d+/g);
+  if (modelNumbers) {
+    for (const num of modelNumbers) {
+      if (cleanEngine.startsWith(num)) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
 const getImageUrl = (bike) => {
   if (bike.images && bike.images.length > 0) {
     return toAbsoluteUploadUrl(bike.images[0]);
@@ -113,12 +132,12 @@ const Inventory = () => {
   return (
     <div className="py-5" style={{ minHeight: '100vh' }}>
       <Helmet>
-        <title>Full Inventory | Katingin Bikes</title>
+        <title>Full Inventory | Jett Lau Done Deal</title>
         <meta name="description" content="Browse our collection of fresh, pre-owned adventure, naked, sport, and touring big bikes. Complete papers, verified quality, and honest deals." />
-        <meta property="og:title" content="Full Inventory | Katingin Bikes" />
+        <meta property="og:title" content="Full Inventory | Jett Lau Done Deal" />
         <meta property="og:description" content="Browse our catalog of fresh, pre-owned big bikes and premium motorcycles in Metro Manila." />
-        <meta property="og:image" content="https://katinginbikes.com/static_data/Katingin_logo.png" />
-        <meta property="og:url" content="https://katinginbikes.com/inventory" />
+        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/favicon_jett_lau.png" />
+        <meta property="og:url" content="https://jettlaudonedeal.com/inventory" />
       </Helmet>
       <Container style={{ paddingTop: '80px' }}>
         {/* Page Header */}
@@ -266,7 +285,7 @@ const Inventory = () => {
                         <div className="p-4 d-flex flex-column flex-grow-1">
                           <span className="text-secondary mb-1 d-block font-weight-bold" style={{ fontSize: '0.8rem', letterSpacing: '1px' }}>{bike.type?.toUpperCase()}</span>
                           <h4 className="moto-heading mb-3" style={{ fontSize: '1.25rem' }}>
-                            <span className="text-accent">{bike.brand}</span> {bike.model} {bike.engineSize ? bike.engineSize.toLowerCase().replace('cc', '').trim() : ''}
+                            <span className="text-accent">{bike.brand}</span> {bike.model}{shouldAppendEngineSize(bike.model, bike.engineSize) ? ` ${bike.engineSize.toLowerCase().replace('cc', '').trim()}` : ''}
                           </h4>
 
                           <div className="d-flex gap-3 mb-4">

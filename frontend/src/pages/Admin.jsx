@@ -21,8 +21,7 @@ const formatWithCommas = (val) => {
 const EMPTY_FORM = {
   combinedIdentity: '', // Format: BRAND MODEL ENGINE_SIZE
   type: '', year: '', mileage: '', price: '',
-  description: '', issues: '', engineConfig: '',
-  power: '', transmission: '', fuelCapacity: '',
+  description: '',
   brand: '', model: '', engineSize: '' // These will be auto-populated
 };
 
@@ -121,7 +120,7 @@ const Admin = () => {
     }
 
     // 2. Character Limit Validation (50 chars for short fields)
-    const longFields = ['description', 'issues'];
+    const longFields = ['description'];
     if (!longFields.includes(name) && value.length > 50) {
       return; // Cap at 50 characters
     }
@@ -144,11 +143,6 @@ const Admin = () => {
       mileage: cleanMileage,
       price: cleanPrice,
       description: bike.description || '',
-      issues: bike.issues || '',
-      engineConfig: bike.engineConfig || '',
-      power: bike.power ? String(bike.power).replace(/[^0-9]/g, '') : '',
-      transmission: bike.transmission || '',
-      fuelCapacity: bike.fuelCapacity ? String(bike.fuelCapacity).replace(/[^0-9]/g, '') : '',
       brand: bike.brand || '',
       model: bike.model || '',
       engineSize: bike.engineSize || ''
@@ -178,21 +172,98 @@ const Admin = () => {
     if (parts.length > 0) {
       brand = parts[0];
       
-      const modelParts = [];
-      let foundEngineSize = false;
+      const remainingParts = parts.slice(1);
+      const remainingText = remainingParts.join(' ');
       
-      for (let i = 1; i < parts.length; i++) {
-        const part = parts[i];
-        // Checks if the part is numeric (e.g., "1100", "700", or containing "cc" like "1100cc")
-        const isNumber = /^\d+(cc)?$/i.test(part);
-        
-        if (isNumber && !foundEngineSize) {
-          engineSize = part;
-          foundEngineSize = true;
-        } else {
-          modelParts.push(part);
+      let extractedVal = null;
+      
+      // 1. Check for explicit cc suffix (e.g. 650cc, 1000 cc)
+      const ccMatch = remainingText.match(/(\d+)\s*cc/i);
+      if (ccMatch) {
+        const val = parseInt(ccMatch[1], 10);
+        if (val >= 50) extractedVal = val;
+      }
+      
+      if (!extractedVal) {
+        // 2. Search for any sequence of 3 or 4 digits (e.g. 500, 1000)
+        const threeFourDigits = remainingText.match(/\b\d{3,4}\b/) || remainingText.match(/\d{3,4}/);
+        if (threeFourDigits) {
+          const val = parseInt(threeFourDigits[0], 10);
+          if (val >= 50) extractedVal = val;
         }
       }
+      
+      if (!extractedVal) {
+        // 3. Search for any sequence of 2 digits (e.g. 50, 90)
+        const twoDigits = remainingText.match(/\b\d{2}\b/) || remainingText.match(/\d{2}/);
+        if (twoDigits) {
+          const val = parseInt(twoDigits[0], 10);
+          if (val >= 50) extractedVal = val;
+        }
+      }
+
+      if (!extractedVal) {
+        // 4. Check known models mapping for implicit engine size (e.g. R7 -> 700cc, TMAX -> 560cc)
+        const cleanModelKey = remainingText.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const KNOWN_MODELS_DISPLACEMENT = {
+          'r7': 700,
+          'r6': 600,
+          'r1': 1000,
+          'r3': 321,
+          'r15': 155,
+          'zx6r': 636,
+          'zx10r': 1000,
+          'zx25r': 250,
+          'zx4r': 400,
+          'zx4rr': 400,
+          'tmax': 560,
+          'xadv': 750,
+          'v4': 1100,
+          'v4s': 1100
+        };
+        
+        if (KNOWN_MODELS_DISPLACEMENT[cleanModelKey]) {
+          extractedVal = KNOWN_MODELS_DISPLACEMENT[cleanModelKey];
+        } else {
+          for (const [key, displacement] of Object.entries(KNOWN_MODELS_DISPLACEMENT)) {
+            if (cleanModelKey.includes(key)) {
+              extractedVal = displacement;
+              break;
+            }
+          }
+        }
+
+        // 5. Automatic digit mapping fallback (e.g., "25r" -> 250, "zx6" -> 600)
+        if (!extractedVal) {
+          const match = cleanModelKey.match(/\d+/);
+          if (match) {
+            const numStr = match[0];
+            if (numStr.length === 1) {
+              const digit = parseInt(numStr, 10);
+              extractedVal = digit === 1 ? 1000 : digit * 100;
+            } else if (numStr.length === 2) {
+              const digit = parseInt(numStr, 10);
+              extractedVal = digit * 10;
+            }
+          }
+        }
+      }
+
+      if (extractedVal) {
+        engineSize = `${extractedVal} cc`;
+      }
+
+      // Build model by filtering out the standalone engine size word if present
+      const modelParts = [];
+      remainingParts.forEach((part) => {
+        if (extractedVal) {
+          const cleanPart = part.toLowerCase().replace('cc', '').trim();
+          if (cleanPart === String(extractedVal)) {
+            return; // Skip standalone engine size word
+          }
+        }
+        modelParts.push(part);
+      });
       
       model = modelParts.join(' ');
     }
@@ -200,9 +271,7 @@ const Admin = () => {
     const data = new FormData();
     data.append('brand', brand);
     data.append('model', model);
-    const cleanEngineSize = engineSize.toUpperCase().replace('CC', '').trim();
-    const formattedEngineSize = cleanEngineSize ? `${cleanEngineSize} cc` : '';
-    data.append('engineSize', formattedEngineSize);
+    data.append('engineSize', engineSize);
     
     Object.keys(formData).forEach((key) => {
       if (!['brand', 'model', 'engineSize', 'combinedIdentity'].includes(key)) {
@@ -604,12 +673,7 @@ const Admin = () => {
                     year: 'e.g. 2023',
                     mileage: 'e.g. 15000 (just the number)',
                     price: 'e.g. 850000 (just the number)',
-                    description: 'Detailed overview of the bike...',
-                    issues: 'Press Shift+Enter to separate into bullets',
-                    engineConfig: 'e.g. Inline-4, Boxer, V-Twin',
-                    power: 'e.g. 136 (in HP)',
-                    transmission: 'e.g. 6-Speed Manual',
-                    fuelCapacity: 'e.g. 20 (in Liters)'
+                    description: 'Detailed overview of the bike...'
                   };
 
                   const labelMapping = {
@@ -617,12 +681,7 @@ const Admin = () => {
                     year: 'Year',
                     mileage: 'Mileage',
                     price: 'Price',
-                    description: 'Description',
-                    issues: 'Issues',
-                    engineConfig: 'Engine Config',
-                    power: 'Power',
-                    transmission: 'Transmission',
-                    fuelCapacity: 'Fuel Capacity'
+                    description: 'Description'
                   };
 
                   return (
@@ -632,17 +691,17 @@ const Admin = () => {
                           {labelMapping[key] || key} {isRequired && <span className="text-accent">*</span>}
                         </label>
                         <Form.Control
-                          as={key === 'description' || key === 'issues' ? 'textarea' : 'input'}
+                          as={key === 'description' ? 'textarea' : 'input'}
                           name={key}
                           className="moto-input"
                           value={formData[key]}
                           onChange={handleInputChange}
                           required={isRequired}
                           placeholder={placeholders[key] || ''}
-                          rows={key === 'description' || key === 'issues' ? 3 : undefined}
+                          rows={key === 'description' ? 3 : undefined}
                           type={['year'].includes(key) ? 'number' : 'text'}
                         />
-                        {(key === 'description' || key === 'issues') && (
+                        {key === 'description' && (
                           <div className="d-flex justify-content-center align-items-center gap-2 mt-2 text-white-50" style={{ fontSize: '0.75rem' }}>
                              Press <kbd style={{ backgroundColor: '#333', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem', border: '1px solid #444' }}>Shift</kbd> + <kbd style={{ backgroundColor: '#333', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem', border: '1px solid #444' }}>Enter</kbd> to move to next bullet
                           </div>

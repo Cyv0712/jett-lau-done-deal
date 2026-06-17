@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Badge, Carousel } from 'react-bootstrap';
-import { ArrowLeft, Calendar, Route, TriangleAlert, CircleCheck, Settings, Circle } from 'lucide-react';
+import { ArrowLeft, Calendar, Route, CircleCheck, Circle } from 'lucide-react';
 import { apiUrl, toAbsoluteUploadUrl } from '../config/api';
 import { Helmet } from 'react-helmet-async';
 
@@ -37,6 +37,25 @@ const BikeDetails = () => {
     return str.startsWith('₱') ? str : `₱${str}`;
   };
 
+  const shouldAppendEngineSize = (model, engineSize) => {
+    if (!engineSize) return false;
+    const cleanEngine = String(engineSize).replace(/[^0-9]/g, '');
+    if (!cleanEngine) return false;
+    
+    const cleanModel = String(model).toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (cleanModel.includes(cleanEngine)) return false;
+    
+    const modelNumbers = cleanModel.match(/\d+/g);
+    if (modelNumbers) {
+      for (const num of modelNumbers) {
+        if (cleanEngine.startsWith(num)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
   // Normalise to an array — supports both old (string) and new (array) schema
   const getImages = (bike) => {
     if (Array.isArray(bike.images) && bike.images.length > 0) return bike.images;
@@ -44,19 +63,19 @@ const BikeDetails = () => {
     return [];
   };
 
-  // Convert newline-separated issues text into a bullet list
-  const renderIssues = (text) => {
-    if (!text) return <p className="text-secondary mb-0 font-monospace" style={{ fontSize: '0.85rem' }}>NO_KNOWN_ISSUES_DETECTED.</p>;
+  // Convert newline-separated description text into a clean block or list
+  const renderDescription = (text) => {
+    if (!text) return <p className="text-secondary mb-0" style={{ fontSize: '0.95rem' }}>No description available.</p>;
     const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
     if (lines.length <= 1) {
-      return <p className="text-secondary mb-0 font-monospace" style={{ fontSize: '0.85rem', lineHeight: '1.6' }}>{text}</p>;
+      return <p className="text-secondary mb-0" style={{ fontSize: '0.95rem', lineHeight: '1.7' }}>{text}</p>;
     }
     return (
       <ul className="mb-0 ps-0" style={{ listStyle: 'none' }}>
         {lines.map((line, i) => (
-          <li key={i} className="text-primary d-flex align-items-start gap-2 mb-2 font-monospace" style={{ fontSize: '0.9rem', lineHeight: '1.6', opacity: 0.9 }}>
-            <Circle size={6} className="text-accent mt-2 flex-shrink-0" fill="currentColor" />
-            {line}
+          <li key={i} className="text-primary d-flex align-items-start gap-2 mb-2" style={{ fontSize: '0.95rem', lineHeight: '1.7', opacity: 0.9 }}>
+            <Circle size={6} className="text-accent mt-2 flex-shrink-0" fill="currentColor" style={{ opacity: 0.7 }} />
+            <span>{line}</span>
           </li>
         ))}
       </ul>
@@ -107,7 +126,7 @@ const BikeDetails = () => {
     <div style={{ paddingTop: '120px', paddingBottom: '100px', minHeight: '100vh' }}>
       <Helmet>
         <title>{`${bike.brand} ${bike.model} (${bike.year}) | Jett Lau Done Deal`}</title>
-        <meta name="description" content={`Get this fresh pre-owned ${bike.brand} ${bike.model} (${bike.year}). Price: ${withPeso(bike.price)}, Engine: ${bike.engineSize}, Config: ${bike.engineConfig || 'N/A'}. Check clean papers.`} />
+        <meta name="description" content={`Get this fresh pre-owned ${bike.brand} ${bike.model} (${bike.year}). Price: ${withPeso(bike.price)}, Engine: ${bike.engineSize}. Check clean papers.`} />
         <meta property="og:title" content={`${bike.brand} ${bike.model} (${bike.year}) - For Sale`} />
         <meta property="og:description" content={`Fresh pre-owned ${bike.brand} ${bike.model} big bike for sale at Jett Lau Done Deal.`} />
         <meta property="og:image" content={absoluteImage} />
@@ -164,7 +183,7 @@ const BikeDetails = () => {
               </div>
               
               <h1 className="moto-heading mb-4" style={{ fontSize: 'clamp(1.6rem, 5vw, 2.5rem)' }}>
-                <span className="text-accent">{bike.brand}</span> {bike.model} {bike.engineSize ? withUnit(bike.engineSize, 'cc') : ''}
+                <span className="text-accent">{bike.brand}</span> {bike.model}{shouldAppendEngineSize(bike.model, bike.engineSize) ? ` ${withUnit(bike.engineSize, 'cc')}` : ''}
               </h1>
 
               <div className="d-flex flex-wrap gap-4 mb-5">
@@ -200,40 +219,11 @@ const BikeDetails = () => {
               </Link>
 
               {/* Overview */}
-              <div className="mb-5">
+              <div className="mb-0">
                 <h5 className="moto-heading mb-3" style={{ fontSize: '1rem' }}><CircleCheck className="text-accent me-2" size={20} /> OVERVIEW</h5>
                 <div className="description-container">
-                  {renderIssues(bike.description)}
+                  {renderDescription(bike.description)}
                 </div>
-              </div>
-
-              {/* Technical Specs */}
-              <div className="mb-5">
-                <h5 className="moto-heading mb-3" style={{ fontSize: '1rem' }}><Settings className="text-accent me-2" size={20} /> SPECIFICATIONS</h5>
-                <Row className="g-3">
-                  {[
-                    { label: 'ENGINE',        value: withUnit(bike.engineSize, 'cc') },
-                    { label: 'CONFIGURATION', value: bike.engineConfig },
-                    { label: 'POWER',         value: withUnit(bike.power, 'HP') },
-                    { label: 'TRANSMISSION',  value: bike.transmission },
-                    { label: 'FUEL CAPACITY', value: withUnit(bike.fuelCapacity, 'L') },
-                  ].map(({ label, value }) => (
-                    <Col md={6} key={label}>
-                      <div className="p-3 rounded bg-muted h-100">
-                        <small className="text-secondary d-block mb-1" style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '1px' }}>{label}</small>
-                        <span className="text-primary fw-bold" style={{ fontSize: '0.9rem' }}>{value || '—'}</span>
-                      </div>
-                    </Col>
-                  ))}
-                </Row>
-              </div>
-
-              {/* Honest Notes */}
-              <div className="p-4 rounded" style={{ backgroundColor: 'rgba(220, 53, 69, 0.05)', border: '1px solid rgba(220, 53, 69, 0.2)' }}>
-                <h5 className="text-destructive mb-3 d-flex align-items-center gap-2 moto-heading" style={{ fontSize: '1rem' }}>
-                  <TriangleAlert size={20} /> HONEST NOTES
-                </h5>
-                {renderIssues(bike.issues)}
               </div>
             </div>
           </Col>

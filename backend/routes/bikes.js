@@ -90,13 +90,25 @@ router.post('/', authMiddleware, upload.array('images', 10), async (req, res) =>
     
     recentSubmissions.set(fingerprint, now);
 
+    const bikeName = `${bikeData.brand} ${bikeData.model} ${bikeData.engineSize || ''}`.trim();
+
+    // 1. Save document first with empty images to trigger validation
+    const bike = new Bike({ ...bikeData, images: [] });
+    await bike.save();
+
+    // 2. Only proceed to upload images if database validation succeeds
     if (req.files?.length) {
-      bikeData.images = await persistUploadedImages(req.files);
+      try {
+        const uploadedImages = await persistUploadedImages(req.files, bikeName);
+        bike.images = uploadedImages;
+        await bike.save();
+      } catch (uploadErr) {
+        await Bike.findByIdAndDelete(bike._id); // rollback
+        throw uploadErr;
+      }
     }
 
-    const bike = new Bike(bikeData);
-    const newBike = await bike.save();
-    res.status(201).json(newBike);
+    res.status(201).json(bike);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -109,16 +121,30 @@ router.put('/:id', authMiddleware, upload.array('images', 10), async (req, res) 
     if (!existing) return res.status(404).json({ message: 'Bike not found' });
 
     const bikeData = { ...req.body };
+    const originalImages = existing.images || [];
+    const bikeName = `${bikeData.brand || existing.brand} ${bikeData.model || existing.model} ${bikeData.engineSize || existing.engineSize || ''}`.trim();
 
+    // 1. Update specs and validate first, keeping original images
+    existing.set({ ...bikeData, images: originalImages });
+    await existing.save();
+
+    // 2. Handle image replacements
     if (req.files?.length) {
-      await deleteBikeImages(existing.images);
-      bikeData.images = await persistUploadedImages(req.files);
+      try {
+        const uploadedImages = await persistUploadedImages(req.files, bikeName);
+        existing.images = uploadedImages;
+        await existing.save();
+        await deleteBikeImages(originalImages); // safely delete old images AFTER new save
+      } catch (uploadErr) {
+        throw uploadErr;
+      }
     } else if (req.body.existingImages) {
-      bikeData.images = Array.isArray(req.body.existingImages) ? req.body.existingImages : [req.body.existingImages];
+      const imagesArray = Array.isArray(req.body.existingImages) ? req.body.existingImages : [req.body.existingImages];
+      existing.images = imagesArray;
+      await existing.save();
     }
 
-    const updatedBike = await Bike.findByIdAndUpdate(req.params.id, bikeData, { new: true });
-    res.json(updatedBike);
+    res.json(existing);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

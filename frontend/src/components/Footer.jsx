@@ -41,6 +41,7 @@ const Footer = () => {
             <ul className="list-unstyled d-flex flex-column gap-3">
               <li><Link to="/" className="text-secondary text-decoration-none hover-accent">Home</Link></li>
               <li><Link to="/inventory" className="text-secondary text-decoration-none hover-accent">Inventory</Link></li>
+              <li><Link to="/financing" className="text-secondary text-decoration-none hover-accent">Financing</Link></li>
               {/* <li><Link to="/buyers" className="text-secondary text-decoration-none hover-accent">Happy Buyers</Link></li> */}
               <li><Link to="/contact" className="text-secondary text-decoration-none hover-accent">Contact Us</Link></li>
             </ul>

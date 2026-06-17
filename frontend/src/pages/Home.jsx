@@ -13,9 +13,9 @@ const Home = () => {
     "@context": "https://schema.org",
     "@type": "MotorcycleDealer",
     "name": "Jett Lau Done Deal",
-    "image": "https://jettlaudonedeal.com/static_data/jett_lau_favicon-removebg-preview.webp",
+    "image": "https://jettlaudonedeal.com/static_data/favicon_jett_lau.png",
     "url": "https://jettlaudonedeal.com",
-    "telephone": "09435509357",
+    "telephone": "09065256115",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Metro Manila",
@@ -43,7 +43,7 @@ const Home = () => {
         <meta name="description" content="Your premier destination for high-quality, second-hand adventure bigbikes in the Philippines. From the Screen to the Showroom." />
         <meta property="og:title" content="Jett Lau Done Deal | Premium Pre-Owned Big Bikes" />
         <meta property="og:description" content="Your premier destination for high-quality, second-hand adventure bigbikes in the Philippines. From the Screen to the Showroom." />
-        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/jett_lau_favicon-removebg-preview.webp" />
+        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/favicon_jett_lau.png" />
         <meta property="og:url" content="https://jettlaudonedeal.com/" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">

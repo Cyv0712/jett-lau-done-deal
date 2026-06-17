@@ -46,7 +46,7 @@ const Contact = () => {
         <meta name="description" content="Connect with Jett Lau Done Deal. Reach out directly via Viber, Facebook Messenger, or Email for big bike availability and financing inquiries." />
         <meta property="og:title" content="Contact Us | Jett Lau Done Deal" />
         <meta property="og:description" content="Reach out to us directly via Viber, Facebook Messenger, or Email." />
-        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/jett_lau_favicon-removebg-preview.webp" />
+        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/favicon_jett_lau.png" />
         <meta property="og:url" content="https://jettlaudonedeal.com/contact" />
       </Helmet>
       {/* ── 1. Hero Section ── */}
@@ -117,8 +117,8 @@ const Contact = () => {
 
             <Col md={4}>
               <Reveal delay={3} className="h-100">
-                <a 
-                  href={emailLink} 
+                <a
+                  href={emailLink}
                   target={isMobile ? undefined : "_blank"}
                   rel={isMobile ? undefined : "noreferrer"}
                   className="moto-card p-4 text-center text-decoration-none d-block h-100"
@@ -133,6 +133,61 @@ const Contact = () => {
               </Reveal>
             </Col>
           </Row>
+
+          {/* ── 3. Showroom Map Section ── */}
+          <Reveal delay={4}>
+            <div className="moto-card p-4 p-md-5 mt-5">
+              <Row className="g-4 align-items-center">
+                <Col lg={5}>
+                  <h3 className="moto-heading mb-4" style={{ fontSize: '2rem' }}>OUR LOCATION</h3>
+                  <div className="mb-4">
+                    <h5 className="text-primary mb-2" style={{ fontSize: '1rem', fontWeight: 600 }}>ADDRESS</h5>
+                    <p className="text-secondary" style={{ fontSize: '0.95rem', lineHeight: '1.6', opacity: 0.9 }}>
+                      {contactInfo.address}
+                    </p>
+                  </div>
+                  <div className="mb-4">
+                    <h5 className="text-primary mb-2" style={{ fontSize: '1rem', fontWeight: 600 }}>OPERATING HOURS</h5>
+                    <p className="text-secondary" style={{ fontSize: '0.95rem', lineHeight: '1.6', opacity: 0.9 }}>
+                      {contactInfo.operatingHours}
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-2">
+                    <a
+                      href={contactInfo.googleMaps}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="moto-btn d-inline-block text-decoration-none"
+                      style={{ padding: '12px 24px', fontSize: '0.85rem' }}
+                    >
+                      OPEN IN GOOGLE MAPS
+                    </a>
+                  </div>
+                </Col>
+                <Col lg={7}>
+                  <div
+                    className="overflow-hidden rounded position-relative"
+                    style={{
+                      height: '400px',
+                      border: '1px solid var(--border-color)',
+                      boxShadow: '0 8px 30px rgba(0,0,0,0.5)'
+                    }}
+                  >
+                    <iframe
+                      title="Done Deal by Jett Lau Showroom Map"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3859.083377747864!2d121.0597107!3d14.6728488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b7d66dced6ff%3A0x74a75f5b6bf8d21f!2sDone%20Deal%20by%20Jett%20Lau!5e0!3m2!1sen!2sph!4v1700000000000"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </Reveal>
         </Container>
       </section>
     </div>

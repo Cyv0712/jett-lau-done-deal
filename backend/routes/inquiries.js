@@ -95,7 +95,7 @@ router.post('/', async (req, res) => {
 
               <!-- Footer -->
               <div style="padding: 24px 40px; background-color: #0d0d0d; border-top: 1px solid #222; text-align: center;">
-                <p style="margin: 0 0 6px 0; font-size: 13px; color: #555555;">Jett Lau Done Deal &nbsp;|&nbsp; jettlaudonedeal@gmail.com &nbsp;|&nbsp; 09435509357</p>
+                <p style="margin: 0 0 6px 0; font-size: 13px; color: #555555;">Jett Lau Done Deal &nbsp;|&nbsp; jettlaudonedeal@gmail.com &nbsp;|&nbsp; 09065256115</p>
                 <p style="margin: 0; font-size: 11px; color: #3a3a3a; letter-spacing: 1px;">This is an automated notification from the Jett Lau Done Deal website.</p>
               </div>
 

@@ -13,7 +13,7 @@ const About = () => {
         <meta name="description" content="Discover Jett Lau Done Deal. Learn about our story, motovlogging roots, the Honest Note Philosophy, and premium adventure big bikes." />
         <meta property="og:title" content="About Us | Jett Lau Done Deal" />
         <meta property="og:description" content="Learn about our roots, story, and the Honest Note Philosophy." />
-        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/jett_lau_favicon-removebg-preview.webp" />
+        <meta property="og:image" content="https://jettlaudonedeal.com/static_data/favicon_jett_lau.png" />
         <meta property="og:url" content="https://jettlaudonedeal.com/about" />
       </Helmet>
       {/* ── 1. Hero Section ── */}

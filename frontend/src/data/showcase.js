@@ -1,59 +1,53 @@
 export const showcaseBikes = [
   {
-    slug: 'honda-africa-twin',
-    brand: 'Honda',
-    model: 'Africa Twin 1100',
-    searchModel: 'Honda Africa Twin 1100',
+    slug: 'ducati-multistrada',
+    brand: 'Ducati',
+    model: 'Multistrada 950',
+    searchModel: 'Ducati Multistrada 950',
     images: [
-      '/static_data/africatwin_1.webp',
-      '/static_data/africatwin_2.webp',
-      '/static_data/africatwin_3.webp'
+      '/static_data/ducati_multistrada.jpg'
     ],
-    tagline: 'True Adventure Awaits',
-    description: 'The Honda Africa Twin is the ultimate machine for riders who demand performance both on and off-road. With its powerful 1100cc engine and rugged chassis, it is built to conquer the most challenging terrains in the Philippines.',
+    tagline: 'The Ultimate Multi-tool',
+    description: 'The Ducati Multistrada 950 is designed for riders who want the perfect balance of agility, comfort, and premium performance. Powered by the renowned Testastretta engine, it delivers versatile touring excellence on any road condition.',
     features: [
-      '1,084cc Liquid-cooled Parallel-Twin',
-      'Selectable Riding Modes',
-      'HSTC (Honda Selectable Torque Control)',
-      'TFT Touchscreen Display'
+      '937cc Testastretta 11° L-Twin',
+      'Bosch Cornering ABS',
+      'Ducati Traction Control (DTC)',
+      'Adjustable Riding Modes'
     ]
   },
   {
-    slug: 'yamaha-tracer-900',
+    slug: 'yamaha-tmax',
     brand: 'Yamaha',
-    model: 'Tracer 900 GT',
-    searchModel: 'Yamaha Tracer 900 GT',
+    model: 'TMAX 560 Tech Max',
+    searchModel: 'Yamaha TMAX 560 Tech Max',
     images: [
-      '/static_data/tracer_1.webp',
-      '/static_data/tracer_2.webp',
-      '/static_data/tracer_3.webp'
+      '/static_data/tmax.jpg'
     ],
-    tagline: 'The Ultimate Sport Tourer',
-    description: 'Equipped with the legendary CP3 engine, the Tracer 900 GT offers a perfect balance of sport performance and touring comfort. It is the go-to choice for Titos who love long rides without sacrificing agility.',
+    tagline: 'Nothing But the Max',
+    description: 'The Yamaha TMAX 560 Tech Max is the undisputed king of maxi-scooters. Melding motorcycle agility with scooter practicality, it offers a luxurious ride, heated seats, and premium styling for the discerning commuter.',
     features: [
-      '847cc Liquid-cooled Inline 3-Cylinder',
-      'Quick Shift System (QSS)',
-      'Adjustable Suspension',
-      'Integrated Hard Side Cases'
+      '562cc Liquid-cooled parallel twin',
+      'Electronic Windshield',
+      'Cruise Control & Heated Grips',
+      'Full Connected TFT Screen'
     ]
   },
   {
-    slug: 'kawasaki-versys-650',
+    slug: 'kawasaki-zx6r',
     brand: 'Kawasaki',
-    model: 'Versys 650',
-    searchModel: 'Kawasaki Versys 650',
+    model: 'Ninja ZX-6R',
+    searchModel: 'Kawasaki Ninja ZX-6R',
     images: [
-      '/static_data/versys650_1.webp',
-      '/static_data/versys650_2.webp',
-      '/static_data/versys650_3.webp'
+      '/static_data/zx6r.jpg'
     ],
-    tagline: 'Versatility in Every Turn',
-    description: 'Known for its reliability and comfortable upright riding position, the Versys 650 is the perfect companion for both daily city commutes and weekend getaways. It is the most practical adventure bike for every rider.',
+    tagline: 'Supersport Powerhouse',
+    description: 'The Kawasaki Ninja ZX-6R delivers high-revving racetrack performance optimized for street riders. With an iconic inline-4 powerplant and race-tuned electronics, it provides an exhilarating supersport experience.',
     features: [
-      '649cc Liquid-cooled Parallel-Twin',
-      'Long-Travel Suspension',
-      'Adjustable Windshield',
-      'Slim and Lightweight Chassis'
+      '636cc Liquid-cooled Inline-4',
+      'Kawasaki Quick Shifter (KQS)',
+      'KTRC Traction Control',
+      'Showa SFF-BP Front Forks'
     ]
   }
 ];
